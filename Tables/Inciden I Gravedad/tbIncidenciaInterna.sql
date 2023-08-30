@@ -1,5 +1,6 @@
--- Se crea un campo nuevo llamado Gravedad para guardar en el el tipo de gravedad de la incidencia que se hidrata de una nueva tabla 
--- creada llamada tbGravedadTipo con dos campos idTipoGravedad, TipoGravedad
+-- Se crea un campo nuevo llamado "Gravedad" del tipo nvarchar(75) para guardar en el el tipo de gravedad de la incidencia 
+-- que se hidrata de la tabla "tbMaestroColorVino" y dentro de ella se crea un campo llamado "TipoGravedad" del tipo nvarchar(75)
+-- Esto de hace porque solmicro trabaja con entity framework y ya estan las clases creadas
 USE [SolmicroERP6_PruebasSub]
 GO
 
