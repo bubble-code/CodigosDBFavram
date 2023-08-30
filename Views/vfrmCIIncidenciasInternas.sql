@@ -1,3 +1,5 @@
+-- Se crea una funcion para obtener mediante el id del operario obtener su DescOperario de la tabla tbMaestroOperario
+-- Se Activa el campo de Gravedad
 -- Vista que se usa en la Pantalla Incidencias(Visto Bueno Calidad y Administracion)
 -- Original
 SELECT dbo.tbIncidenciaInterna.IDIncidencia, dbo.tbIncidenciaInterna.DescIncidencia, dbo.tbIncidenciaInterna.Texto, dbo.tbIncidenciaInterna.IDCliente, dbo.tbIncidenciaInterna.IDAlbaran, dbo.tbIncidenciaInterna.IDArticulo,
