@@ -1,0 +1,119 @@
+--vista original, se crea una nueva funcion para obtener las observaciones de cada cliente "GetObservacionesALE"
+SELECT        dbo.tbFacturaVentaCabecera.IDFactura, dbo.tbFacturaVentaCabecera.VencimientosManuales, dbo.tbFacturaVentaCabecera.IDTipoAsiento, dbo.tbFacturaVentaCabecera.IDCondicionPago, dbo.tbFacturaVentaCabecera.IDDiaPago, 
+                         dbo.tbFacturaVentaCabecera.IDClienteBanco, dbo.tbFacturaVentaCabecera.IDBancoPropio, dbo.tbFacturaVentaCabecera.IDFormaPago, dbo.tbFacturaVentaCabecera.CambioA, dbo.tbFacturaVentaCabecera.CambioB, 
+                         dbo.tbFacturaVentaCabecera.IDMoneda, dbo.tbFacturaVentaCabecera.IDDireccion, dbo.tbFacturaVentaCabecera.FechaDeclaracionManual, dbo.tbFacturaVentaCabecera.FechaParaDeclaracion, 
+                         dbo.tbFacturaVentaCabecera.IDFacturaCompra, dbo.tbFacturaVentaCabecera.NDeclaracionIva, dbo.tbFacturaVentaCabecera.AñoDeclaracionIva, dbo.tbFacturaVentaCabecera.GeneradoFichero, dbo.tbFacturaVentaCabecera.EDI, 
+                         dbo.tbFacturaVentaCabecera.IDCentroGestion, dbo.tbFacturaVentaCabecera.TipoFactura, dbo.tbFacturaVentaCabecera.IDEjercicio, dbo.tbMaestroEjercicio.DescEjercicio, dbo.tbFacturaVentaCabecera.IDClienteInicial, 
+                         dbo.tbFacturaVentaCabecera.Texto, dbo.tbFacturaVentaCabecera.ImpRetencion, dbo.tbFacturaVentaCabecera.DtoFactura, dbo.tbFacturaVentaCabecera.ImpDpp, dbo.tbFacturaVentaCabecera.ImpDtoFactura, 
+                         dbo.tbFacturaVentaCabecera.ImpRecFinan, dbo.tbFacturaVentaCabecera.RecFinan, dbo.tbFacturaVentaCabecera.ImpIva, dbo.tbFacturaVentaCabecera.ImpRE, dbo.tbFacturaVentaCabecera.ImpTotal, 
+                         dbo.tbFacturaVentaCabecera.ImpLineas, dbo.tbFacturaVentaCabecera.BaseImponible, dbo.tbFacturaVentaCabecera.DtoProntoPago, dbo.tbFacturaVentaCabecera.RetencionIRPF, dbo.tbFacturaVentaCabecera.ImpLineasB, 
+                         dbo.tbFacturaVentaCabecera.ImpLineasA, dbo.tbFacturaVentaCabecera.ImpIvaA, dbo.tbFacturaVentaCabecera.ImpIvaB, dbo.tbFacturaVentaCabecera.ImpTotalA, dbo.tbFacturaVentaCabecera.ImpTotalB, 
+                         dbo.tbFacturaVentaCabecera.ImpRetencionB, dbo.tbFacturaVentaCabecera.ImpDppA, dbo.tbFacturaVentaCabecera.ImpDppB, dbo.tbFacturaVentaCabecera.ImpREB, dbo.tbFacturaVentaCabecera.ImpDtoFacturaA, 
+                         dbo.tbFacturaVentaCabecera.ImpDtoFacturaB, dbo.tbFacturaVentaCabecera.BaseImponibleA, dbo.tbFacturaVentaCabecera.BaseImponibleB, dbo.tbFacturaVentaCabecera.ImpRetencionA, dbo.tbFacturaVentaCabecera.ImpREA, 
+                         dbo.tbFacturaVentaCabecera.ImpRecFinanA, dbo.tbFacturaVentaCabecera.ImpRecFinanB, dbo.tbFacturaVentaCabecera.IvaManual, dbo.tbFacturaVentaCabecera.IDContador, dbo.tbFacturaVentaCabecera.IDCliente, 
+                         dbo.tbFacturaVentaCabecera.CifCliente, dbo.tbFacturaVentaCabecera.RazonSocial, dbo.tbFacturaVentaCabecera.Direccion, dbo.tbFacturaVentaCabecera.CodPostal, dbo.tbFacturaVentaCabecera.Poblacion, 
+                         dbo.tbFacturaVentaCabecera.NFactura, dbo.tbFacturaVentaCabecera.IDPais, dbo.tbFacturaVentaCabecera.Provincia, dbo.tbFacturaVentaCabecera.Estado, tbMaestroCliente_1.DescCliente AS DescClienteInicial, 
+                         dbo.tbClienteDireccion.RazonSocial AS RazonSocialFac, dbo.tbClienteDireccion.Direccion AS DireccionFac, dbo.tbClienteDireccion.CodPostal AS CodPostalFac, dbo.tbClienteDireccion.Poblacion AS PoblacionFac, 
+                         dbo.tbClienteDireccion.Provincia AS ProvinciaFac, dbo.tbMaestroBanco.DescBanco, dbo.tbFacturaVentaCabecera.EnviadaEntidadAseguradora, dbo.tbMaestroAseguradora.DescAseguradora, 
+                         dbo.tbFacturaVentaCabecera.FechaVencimiento, dbo.tbFacturaVentaCabecera.FechaFactura, dbo.tbFacturaVentaCabecera.ImpPuntoVerde, dbo.tbFacturaVentaCabecera.ImpPuntoVerdeA, 
+                         dbo.tbFacturaVentaCabecera.ImpPuntoVerdeB, dbo.tbFacturaVentaCabecera.Enviar347, dbo.tbFacturaVentaCabecera.ImpRetencionGar, dbo.tbFacturaVentaCabecera.TipoRetencion, dbo.tbFacturaVentaCabecera.Retencion, 
+                         dbo.tbFacturaVentaCabecera.FechaRetencion, dbo.tbFacturaVentaCabecera.IDObra, dbo.tbFacturaVentaCabecera.IDCentroCoste, tbMaestroCliente_2.NumeroCopias, dbo.tbFacturaVentaCabecera.ClaveOperacion, 
+                         dbo.tbFacturaVentaCabecera.IDFacturaRectificada, dbo.tbFacturaVentaCabecera.TipoOperIntra, dbo.tbMaestroMoneda.DescMoneda, (CASE WHEN NOT dbo.tbClienteDireccion.Email IS NULL 
+                         THEN dbo.tbClienteDireccion.Email ELSE tbMaestroCliente_1.Email END) AS Email, tbMaestroCliente_2.FacturaElectronica, dbo.tbFacturaVentaCabecera.DirecFacturaPDF, dbo.tbFacturaVentaCabecera.DirecFacturaXML, 
+                         COALESCE (tbMaestroCliente_1.Telefono, tbMaestroCliente_2.Telefono) AS Telefono, COALESCE (tbMaestroCliente_1.Fax, tbMaestroCliente_2.Fax) AS Fax, dbo.tbFacturaVentaCabecera.DirecCorreoPDF, 
+                         dbo.tbFacturaVentaCabecera.BaseRetencion, dbo.tbFacturaVentaCabecera.BaseRetencionA, dbo.tbFacturaVentaCabecera.BaseRetencionB, dbo.tbFacturaVentaCabecera.RetencionManual, 
+                         dbo.tbFacturaVentaCabecera.OpeTriangular, tbMaestroCliente_2.CCCliente, dbo.tbFacturaVentaCabecera.IDProveedor, dbo.tbFacturaVentaCabecera.IDOperario, dbo.tbFacturaVentaCabecera.ComunicadoGestorCobro, 
+                         dbo.tbFacturaVentaCabecera.FechaComunicacionGestorCobro, dbo.tbFacturaVentaCabecera.IDMandato, dbo.tbFacturaVentaCabecera.Enviar349, dbo.tbFacturaVentaCabecera.ConcursoAcreedores, 
+                         dbo.tbFacturaVentaCabecera.ImpImpuestos, dbo.tbFacturaVentaCabecera.ImpImpuestosA, dbo.tbFacturaVentaCabecera.ImpImpuestosB, dbo.tbFacturaVentaCabecera.IDOficinaContable, 
+                         dbo.tbFacturaVentaCabecera.IDOrganoGestor, dbo.tbFacturaVentaCabecera.IDUnidadTramitadora, dbo.tbFacturaVentaCabecera.IDMotivoNoAsegurado, dbo.tbFacturaVentaCabecera.Arqueo, 
+                         dbo.tbFacturaVentaCabecera.EmitidaPorTerceros, dbo.tbFacturaVentaCabecera.CensadoAEAT, dbo.tbFacturaVentaCabecera.EnviarSII, dbo.tbFacturaVentaCabecera.FechaOperacion, 
+                         dbo.tbFacturaVentaCabecera.FechaExpedicion, dbo.tbFacturaVentaCabecera.IDClaveRegimenEspecial, dbo.tbFacturaVentaCabecera.IDClaveRegimenEspecial1, dbo.tbFacturaVentaCabecera.IDClaveRegimenEspecial2, 
+                         dbo.tbFacturaVentaCabecera.IDClaveTipoFactura, dbo.tbFacturaVentaCabecera.Sustitutiva, dbo.tbFacturaVentaCabecera.TipoDocIdentidad, dbo.tbFacturaVentaCabecera.Cupon, dbo.tbFacturaVentaCabecera.IDOrganoProponente, 
+                         dbo.tbFacturaVentaCabecera.IDAseguradora, dbo.tbFacturaVentaCabecera.DIR, dbo.tbFacturaVentaCabecera.DIRe, dbo.tbFacturaVentaCabecera.AreaGestion, dbo.tbFacturaVentaCabecera.ContratoReferencia, 
+                         CAST(dbo.tbFacturaVentaCabecera.Estado AS BIT) AS Contabilizado, CAST(CASE WHEN dbo.tbFacturaVentaCabecera.EstadoTBAI = 0 THEN 0 ELSE 1 END AS BIT) AS GeneradoTBAI, dbo.tbFacturaVentaCabecera.EstadoTBAI, 
+                         dbo.tbFacturaVentaCabecera.SoftwareNoGarante
+FROM            dbo.tbMaestroCliente AS tbMaestroCliente_1 RIGHT OUTER JOIN
+                         dbo.tbMaestroCliente AS tbMaestroCliente_2 INNER JOIN
+                         dbo.tbFacturaVentaCabecera ON tbMaestroCliente_2.IDCliente = dbo.tbFacturaVentaCabecera.IDCliente INNER JOIN
+                         dbo.tbMaestroMoneda ON dbo.tbFacturaVentaCabecera.IDMoneda = dbo.tbMaestroMoneda.IDMoneda ON tbMaestroCliente_1.IDCliente = dbo.tbFacturaVentaCabecera.IDClienteInicial LEFT OUTER JOIN
+                         dbo.tbMaestroEjercicio ON dbo.tbFacturaVentaCabecera.IDEjercicio = dbo.tbMaestroEjercicio.IDEjercicio LEFT OUTER JOIN
+                         dbo.tbClienteBanco ON dbo.tbFacturaVentaCabecera.IDClienteBanco = dbo.tbClienteBanco.IDClienteBanco LEFT OUTER JOIN
+                         dbo.tbMaestroBanco ON dbo.tbClienteBanco.IDBanco = dbo.tbMaestroBanco.IDBanco LEFT OUTER JOIN
+                         dbo.tbClienteDireccion ON dbo.tbFacturaVentaCabecera.IDDireccion = dbo.tbClienteDireccion.IDDireccion LEFT OUTER JOIN
+                         dbo.tbMaestroAseguradora ON dbo.tbFacturaVentaCabecera.IDAseguradora = dbo.tbMaestroAseguradora.IDAseguradora
+
+
+
+-- vista modificada para mostrar las observaciones.
+SELECT        dbo.tbFacturaVentaCabecera.IDFactura, dbo.tbFacturaVentaCabecera.VencimientosManuales, dbo.tbFacturaVentaCabecera.IDTipoAsiento, dbo.tbFacturaVentaCabecera.IDCondicionPago, dbo.tbFacturaVentaCabecera.IDDiaPago, 
+                         dbo.tbFacturaVentaCabecera.IDClienteBanco, dbo.tbFacturaVentaCabecera.IDBancoPropio, dbo.tbFacturaVentaCabecera.IDFormaPago, dbo.tbFacturaVentaCabecera.CambioA, dbo.tbFacturaVentaCabecera.CambioB, 
+                         dbo.tbFacturaVentaCabecera.IDMoneda, dbo.tbFacturaVentaCabecera.IDDireccion, dbo.tbFacturaVentaCabecera.FechaDeclaracionManual, dbo.tbFacturaVentaCabecera.FechaParaDeclaracion, 
+                         dbo.tbFacturaVentaCabecera.IDFacturaCompra, dbo.tbFacturaVentaCabecera.NDeclaracionIva, dbo.tbFacturaVentaCabecera.AñoDeclaracionIva, dbo.tbFacturaVentaCabecera.GeneradoFichero, dbo.tbFacturaVentaCabecera.EDI, 
+                         dbo.tbFacturaVentaCabecera.IDCentroGestion, dbo.tbFacturaVentaCabecera.TipoFactura, dbo.tbFacturaVentaCabecera.IDEjercicio, dbo.tbMaestroEjercicio.DescEjercicio, dbo.tbFacturaVentaCabecera.IDClienteInicial, 
+                         dbo.tbFacturaVentaCabecera.Texto, dbo.tbFacturaVentaCabecera.ImpRetencion, dbo.tbFacturaVentaCabecera.DtoFactura, dbo.tbFacturaVentaCabecera.ImpDpp, dbo.tbFacturaVentaCabecera.ImpDtoFactura, 
+                         dbo.tbFacturaVentaCabecera.ImpRecFinan, dbo.tbFacturaVentaCabecera.RecFinan, dbo.tbFacturaVentaCabecera.ImpIva, dbo.tbFacturaVentaCabecera.ImpRE, dbo.tbFacturaVentaCabecera.ImpTotal, 
+                         dbo.tbFacturaVentaCabecera.ImpLineas, dbo.tbFacturaVentaCabecera.BaseImponible, dbo.tbFacturaVentaCabecera.DtoProntoPago, dbo.tbFacturaVentaCabecera.RetencionIRPF, dbo.tbFacturaVentaCabecera.ImpLineasB, 
+                         dbo.tbFacturaVentaCabecera.ImpLineasA, dbo.tbFacturaVentaCabecera.ImpIvaA, dbo.tbFacturaVentaCabecera.ImpIvaB, dbo.tbFacturaVentaCabecera.ImpTotalA, dbo.tbFacturaVentaCabecera.ImpTotalB, 
+                         dbo.tbFacturaVentaCabecera.ImpRetencionB, dbo.tbFacturaVentaCabecera.ImpDppA, dbo.tbFacturaVentaCabecera.ImpDppB, dbo.tbFacturaVentaCabecera.ImpREB, dbo.tbFacturaVentaCabecera.ImpDtoFacturaA, 
+                         dbo.tbFacturaVentaCabecera.ImpDtoFacturaB, dbo.tbFacturaVentaCabecera.BaseImponibleA, dbo.tbFacturaVentaCabecera.BaseImponibleB, dbo.tbFacturaVentaCabecera.ImpRetencionA, dbo.tbFacturaVentaCabecera.ImpREA, 
+                         dbo.tbFacturaVentaCabecera.ImpRecFinanA, dbo.tbFacturaVentaCabecera.ImpRecFinanB, dbo.tbFacturaVentaCabecera.IvaManual, dbo.tbFacturaVentaCabecera.IDContador, dbo.tbFacturaVentaCabecera.IDCliente, 
+                         dbo.tbFacturaVentaCabecera.CifCliente, dbo.tbFacturaVentaCabecera.RazonSocial, dbo.tbFacturaVentaCabecera.Direccion, dbo.tbFacturaVentaCabecera.CodPostal, dbo.tbFacturaVentaCabecera.Poblacion, 
+                         dbo.tbFacturaVentaCabecera.NFactura, dbo.tbFacturaVentaCabecera.IDPais, dbo.tbFacturaVentaCabecera.Provincia, dbo.tbFacturaVentaCabecera.Estado, tbMaestroCliente_1.DescCliente AS DescClienteInicial, 
+                         dbo.tbClienteDireccion.RazonSocial AS RazonSocialFac, dbo.tbClienteDireccion.Direccion AS DireccionFac, dbo.tbClienteDireccion.CodPostal AS CodPostalFac, dbo.tbClienteDireccion.Poblacion AS PoblacionFac, 
+                         dbo.tbClienteDireccion.Provincia AS ProvinciaFac, dbo.tbMaestroBanco.DescBanco, dbo.tbFacturaVentaCabecera.EnviadaEntidadAseguradora, dbo.tbMaestroAseguradora.DescAseguradora, 
+                         dbo.tbFacturaVentaCabecera.FechaVencimiento, dbo.tbFacturaVentaCabecera.FechaFactura, dbo.tbFacturaVentaCabecera.ImpPuntoVerde, dbo.tbFacturaVentaCabecera.ImpPuntoVerdeA, 
+                         dbo.tbFacturaVentaCabecera.ImpPuntoVerdeB, dbo.tbFacturaVentaCabecera.Enviar347, dbo.tbFacturaVentaCabecera.ImpRetencionGar, dbo.tbFacturaVentaCabecera.TipoRetencion, dbo.tbFacturaVentaCabecera.Retencion, 
+                         dbo.tbFacturaVentaCabecera.FechaRetencion, dbo.tbFacturaVentaCabecera.IDObra, dbo.tbFacturaVentaCabecera.IDCentroCoste, tbMaestroCliente_2.NumeroCopias, dbo.tbFacturaVentaCabecera.ClaveOperacion, 
+                         dbo.tbFacturaVentaCabecera.IDFacturaRectificada, dbo.tbFacturaVentaCabecera.TipoOperIntra, dbo.tbMaestroMoneda.DescMoneda, (CASE WHEN NOT dbo.tbClienteDireccion.Email IS NULL 
+                         THEN dbo.tbClienteDireccion.Email ELSE tbMaestroCliente_1.Email END) AS Email, tbMaestroCliente_2.FacturaElectronica, dbo.tbFacturaVentaCabecera.DirecFacturaPDF, dbo.tbFacturaVentaCabecera.DirecFacturaXML, 
+                         COALESCE (tbMaestroCliente_1.Telefono, tbMaestroCliente_2.Telefono) AS Telefono, COALESCE (tbMaestroCliente_1.Fax, tbMaestroCliente_2.Fax) AS Fax, dbo.tbFacturaVentaCabecera.DirecCorreoPDF, 
+                         dbo.tbFacturaVentaCabecera.BaseRetencion, dbo.tbFacturaVentaCabecera.BaseRetencionA, dbo.tbFacturaVentaCabecera.BaseRetencionB, dbo.tbFacturaVentaCabecera.RetencionManual, 
+                         dbo.tbFacturaVentaCabecera.OpeTriangular, tbMaestroCliente_2.CCCliente, dbo.tbFacturaVentaCabecera.IDProveedor, dbo.tbFacturaVentaCabecera.IDOperario, dbo.tbFacturaVentaCabecera.ComunicadoGestorCobro, 
+                         dbo.tbFacturaVentaCabecera.FechaComunicacionGestorCobro, dbo.tbFacturaVentaCabecera.IDMandato, dbo.tbFacturaVentaCabecera.Enviar349, dbo.tbFacturaVentaCabecera.ConcursoAcreedores, 
+                         dbo.tbFacturaVentaCabecera.ImpImpuestos, dbo.tbFacturaVentaCabecera.ImpImpuestosA, dbo.tbFacturaVentaCabecera.ImpImpuestosB, dbo.tbFacturaVentaCabecera.IDOficinaContable, 
+                         dbo.tbFacturaVentaCabecera.IDOrganoGestor, dbo.tbFacturaVentaCabecera.IDUnidadTramitadora, dbo.tbFacturaVentaCabecera.IDMotivoNoAsegurado, dbo.tbFacturaVentaCabecera.Arqueo, 
+                         dbo.tbFacturaVentaCabecera.EmitidaPorTerceros, dbo.tbFacturaVentaCabecera.CensadoAEAT, dbo.tbFacturaVentaCabecera.EnviarSII, dbo.tbFacturaVentaCabecera.FechaOperacion, 
+                         dbo.tbFacturaVentaCabecera.FechaExpedicion, dbo.tbFacturaVentaCabecera.IDClaveRegimenEspecial, dbo.tbFacturaVentaCabecera.IDClaveRegimenEspecial1, dbo.tbFacturaVentaCabecera.IDClaveRegimenEspecial2, 
+                         dbo.tbFacturaVentaCabecera.IDClaveTipoFactura, dbo.tbFacturaVentaCabecera.Sustitutiva, dbo.tbFacturaVentaCabecera.TipoDocIdentidad, dbo.tbFacturaVentaCabecera.Cupon, dbo.tbFacturaVentaCabecera.IDOrganoProponente, 
+                         dbo.tbFacturaVentaCabecera.IDAseguradora, dbo.tbFacturaVentaCabecera.DIR, dbo.tbFacturaVentaCabecera.DIRe, dbo.tbFacturaVentaCabecera.AreaGestion, dbo.tbFacturaVentaCabecera.ContratoReferencia, 
+                         CAST(dbo.tbFacturaVentaCabecera.Estado AS BIT) AS Contabilizado, CAST(CASE WHEN dbo.tbFacturaVentaCabecera.EstadoTBAI = 0 THEN 0 ELSE 1 END AS BIT) AS GeneradoTBAI, dbo.tbFacturaVentaCabecera.EstadoTBAI, 
+                         dbo.tbFacturaVentaCabecera.SoftwareNoGarante,
+                             (SELECT        TOP (1) DescObservacion
+                               FROM            dbo.GetObservacionesALE(dbo.tbFacturaVentaCabecera.IDCliente) AS GetObservacionesALE_1) AS Observacion1
+FROM            dbo.tbMaestroCliente AS tbMaestroCliente_1 RIGHT OUTER JOIN
+                         dbo.tbMaestroCliente AS tbMaestroCliente_2 INNER JOIN
+                         dbo.tbFacturaVentaCabecera ON tbMaestroCliente_2.IDCliente = dbo.tbFacturaVentaCabecera.IDCliente INNER JOIN
+                         dbo.tbMaestroMoneda ON dbo.tbFacturaVentaCabecera.IDMoneda = dbo.tbMaestroMoneda.IDMoneda ON tbMaestroCliente_1.IDCliente = dbo.tbFacturaVentaCabecera.IDClienteInicial LEFT OUTER JOIN
+                         dbo.tbMaestroEjercicio ON dbo.tbFacturaVentaCabecera.IDEjercicio = dbo.tbMaestroEjercicio.IDEjercicio LEFT OUTER JOIN
+                         dbo.tbClienteBanco ON dbo.tbFacturaVentaCabecera.IDClienteBanco = dbo.tbClienteBanco.IDClienteBanco LEFT OUTER JOIN
+                         dbo.tbMaestroBanco ON dbo.tbClienteBanco.IDBanco = dbo.tbMaestroBanco.IDBanco LEFT OUTER JOIN
+                         dbo.tbClienteDireccion ON dbo.tbFacturaVentaCabecera.IDDireccion = dbo.tbClienteDireccion.IDDireccion LEFT OUTER JOIN
+                         dbo.tbMaestroAseguradora ON dbo.tbFacturaVentaCabecera.IDAseguradora = dbo.tbMaestroAseguradora.IDAseguradora
+
+-- funcion creada para obtener las observaciones de los clientes
+
+USE [SolmicroERP6_PruebasSub]
+GO
+/****** Object:  UserDefinedFunction [dbo].[GetObservacionesALE]    Script Date: 26/09/2023 13:19:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER FUNCTION [dbo].[GetObservacionesALE](@IDCliente nvarchar(25))
+RETURNS TABLE 
+AS
+RETURN 
+(
+SELECT tbMaestroObservacion.DescObservacion, tbClienteObservacion.IDClienteObservacion
+FROM tbClienteObservacion INNER JOIN 
+tbMaestroObservacion ON tbClienteObservacion.IDObservacion = tbMaestroObservacion.IDObservacion 
+WHERE (tbClienteObservacion.IDCliente = @IDCliente)
+)
+
+
+
