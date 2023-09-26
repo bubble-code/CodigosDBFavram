@@ -1,0 +1,162 @@
+--vista original, se crea una nueva funcion para obtener las observaciones de cada cliente "GetObservacionesALE"
+
+SELECT        TOP (100) PERCENT dbo.xPrintingAuxiliarTable.IdProcess, dbo.xPrintingAuxiliarTable.NumberOfCopies AS Copia, dbo.tbFacturaVentaCabecera.IDFactura, 
+                         CASE WHEN vParamSIISerie.Serie = 1 THEN (COALESCE (dbo.tbFacturaVentaCabecera.IDContador, N'') + dbo.tbFacturaVentaCabecera.NFactura) ELSE dbo.tbFacturaVentaCabecera.NFactura END AS NFactura, 
+                         dbo.tbFacturaVentaCabecera.FechaFactura, dbo.tbFacturaVentaCabecera.RazonSocial, dbo.tbFacturaVentaCabecera.IDCliente, dbo.tbFacturaVentaCabecera.CifCliente, dbo.tbMaestroFormaPago.DescFormaPago, 
+                         dbo.tbFacturaVentaCabecera.BaseImponible, dbo.tbFacturaVentaCabecera.BaseImponibleA, dbo.tbFacturaVentaCabecera.ImpLineas, dbo.tbFacturaVentaCabecera.ImpLineasA, dbo.tbFacturaVentaCabecera.ImpIva, 
+                         dbo.tbFacturaVentaCabecera.ImpIvaA, dbo.tbFacturaVentaCabecera.ImpTotal, dbo.tbFacturaVentaCabecera.ImpTotalA, dbo.tbFacturaVentaCabecera.ImpRE, dbo.tbFacturaVentaCabecera.ImpREA, 
+                         dbo.tbFacturaVentaCabecera.RetencionIRPF, dbo.tbFacturaVentaCabecera.ImpRetencion, dbo.tbFacturaVentaCabecera.ImpRetencionA, dbo.tbFacturaVentaCabecera.FechaOperacion, 
+                         dbo.tbFacturaVentaCabecera.IDCondicionPago, dbo.tbFacturaVentaCabecera.Texto, dbo.tbMaestroMoneda.Abreviatura, dbo.tbMaestroMoneda.NDecimalesPrec, dbo.tbMaestroMoneda.NDecimalesImp, 
+                         dbo.tbFacturaVentaLinea.IDLineaFactura, COALESCE (dbo.tbFacturaVentaLinea.RefCliente, dbo.tbFacturaVentaLinea.IDArticulo) AS IDArticulo, CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL 
+                         THEN COALESCE (dbo.tbFacturaVentaLinea.DescRefCliente, dbo.tbFacturaVentaLinea.DescArticulo) ELSE dbo.tbMaestroImpuesto.DescImpuesto + N': ' + CONVERT(nvarchar, CONVERT(float, dbo.tbFacturaVentaLinea.KGPlastico))
+                          + N' - NR: ' + CONVERT(nvarchar, CONVERT(float, dbo.tbFacturaVentaLinea.KGPlasticoNR)) END AS DescArticulo, dbo.tbFacturaVentaLinea.IDAlbaran, CONVERT(numeric(23, 8), 
+                         CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL THEN dbo.tbFacturaVentaLinea.Cantidad ELSE dbo.tbFacturaVentaLinea.QInterna * dbo.tbFacturaVentaLinea.KGPlasticoNR END) AS Cantidad, 
+                         CONVERT(numeric(23, 8), CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL THEN dbo.tbFacturaVentaLinea.Dto1 ELSE 0 END) AS Dto1, CONVERT(numeric(23, 8), 
+                         CASE WHEN dbo.tbFacturaVentaCabecera.CambioA = 0 THEN 0 ELSE CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL 
+                         THEN dbo.tbFacturaVentaLinea.Precio ELSE dbo.tbFacturaVentaImpuesto.Valor / dbo.tbFacturaVentaCabecera.CambioA END END) AS Precio, CONVERT(numeric(23, 8), 
+                         CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL THEN dbo.tbFacturaVentaLinea.PrecioA ELSE dbo.tbFacturaVentaImpuesto.Valor END) AS PrecioA, CONVERT(numeric(23, 8), 
+                         CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL THEN dbo.tbFacturaVentaLinea.Importe ELSE dbo.tbFacturaVentaImpuesto.Importe END) AS Importe, CONVERT(numeric(23, 8), 
+                         CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL THEN dbo.tbFacturaVentaLinea.ImporteA ELSE dbo.tbFacturaVentaImpuesto.ImporteA END) AS ImporteA, dbo.tbFacturaVentaLinea.IDConcepto, 
+                         dbo.tbFacturaVentaLinea.DescConcepto, CASE WHEN COALESCE (vNIvasEnFactura.nIvas, 0) = 1 THEN dbo.fFactorTipoIva(dbo.tbFacturaVentaLinea.IDTipoIVA, dbo.tbFacturaVentaCabecera.FechaFactura) ELSE 0 END AS Factor, 
+                         CASE WHEN COALESCE (vNIvasEnFactura.nIvasRE, 0) = 1 THEN dbo.fFactorTipoIvaRE(dbo.tbFacturaVentaLinea.IDTipoIVA, dbo.tbFacturaVentaCabecera.FechaFactura) ELSE 0 END AS IvaRE, 
+                         dbo.tbMaestroFormaPago.Trasferencia, dbo.tbMaestroBanco.DescBanco, dbo.tbClienteBanco.CodigoIBAN, dbo.tbClienteDireccion.RazonSocial AS RazonSocialFacturacion, dbo.tbClienteDireccion.Direccion, 
+                         dbo.tbClienteDireccion.CodPostal, dbo.tbClienteDireccion.Poblacion, dbo.tbClienteDireccion.Provincia, dbo.tbClienteDireccion.IDPais, PaisClienteDireccion.DescPais, COALESCE (dbo.tbAlbaranVentaCabecera.SuAlbaran, 
+                         dbo.tbAlbaranVentaCabecera.NAlbaran) AS NAlbaran, dbo.tbAlbaranVentaCabecera.FechaAlbaran, dbo.tbOficinaContable.DescOficinaContable, dbo.tbOrganoGestor.DescOrganoGestor, 
+                         dbo.tbUnidadTramitadora.DescUnidadTramitadora, dbo.tbDatosEmpresa.DatosRegistrales, dbo.vMonedaA.AbreviaturaA, dbo.vMonedaA.NDecimalesPrecA, dbo.vMonedaA.NDecimalesImpA, vParamIvaCaja.IvaCaja, 
+                         dbo.tbMaestroContador.IDTipoComprobante, dbo.tbMaestroProveedor.RazonSocial AS RazonSocialProveedor, dbo.tbMaestroProveedor.Direccion AS DireccionlProveedor, 
+                         dbo.tbMaestroProveedor.CodPostal AS CodPostalProveedor, dbo.tbMaestroProveedor.Poblacion AS PoblacionProveedor, dbo.tbMaestroProveedor.Provincia AS ProvinciaProveedor, 
+                         PaisProveedor.DescPais AS DescPaisProveedor, dbo.tbMaestroBancoPropio.CodigoIBAN AS CodigoIBANCliente, dbo.tbFacturaVentaLinea.Regalo, dbo.tbFacturaVentaLinea.RefCliente, dbo.tbFacturaVentaLinea.DescRefCliente, 
+                         dbo.tbMaestroMoneda.DescMoneda, dbo.tbFacturaVentaLinea.Texto AS TextoLinea, dbo.tbFacturaVentaLinea.IDUdMedida, dbo.tbPedidoVentaCabecera.NPedido AS PedidoCliente, 
+                         dbo.tbPedidoVentaCabecera.FechaPedido AS FechaPedidoCliente, dbo.tbFacturaVentaLinea.PedidoCliente AS PedidoClienteLinea, dbo.tbFacturaVentaLinea.IDOrdenLinea, dbo.tbFacturaVentaLinea.Importe AS ImporteL, 
+                         dbo.tbFacturaVentaLinea.Revision
+FROM            dbo.vMonedaA CROSS JOIN
+                         dbo.tbFacturaVentaCabecera LEFT OUTER JOIN
+                         dbo.vFacturaVentaLineaConImpuesto ON dbo.tbFacturaVentaCabecera.IDFactura = dbo.vFacturaVentaLineaConImpuesto.IDFactura LEFT OUTER JOIN
+                         dbo.tbFacturaVentaLinea ON dbo.vFacturaVentaLineaConImpuesto.IDLineaFactura = dbo.tbFacturaVentaLinea.IDLineaFactura LEFT OUTER JOIN
+                         dbo.tbFacturaVentaImpuesto ON dbo.vFacturaVentaLineaConImpuesto.IDLineaImpuesto = dbo.tbFacturaVentaImpuesto.IDLineaImpuesto LEFT OUTER JOIN
+                         dbo.tbMaestroImpuesto ON dbo.tbFacturaVentaImpuesto.IDImpuesto = dbo.tbMaestroImpuesto.IDImpuesto LEFT OUTER JOIN
+                         dbo.xPrintingAuxiliarTable ON dbo.tbFacturaVentaCabecera.IDFactura = dbo.xPrintingAuxiliarTable.NumericLink LEFT OUTER JOIN
+                         dbo.tbClienteDireccion ON dbo.tbFacturaVentaCabecera.IDDireccion = dbo.tbClienteDireccion.IDDireccion LEFT OUTER JOIN
+                         dbo.tbMaestroPais AS PaisClienteDireccion ON dbo.tbClienteDireccion.IDPais = PaisClienteDireccion.IDPais LEFT OUTER JOIN
+                         dbo.tbClienteBanco ON dbo.tbFacturaVentaCabecera.IDClienteBanco = dbo.tbClienteBanco.IDClienteBanco LEFT OUTER JOIN
+                         dbo.tbMaestroBanco ON dbo.tbMaestroBanco.IDBanco = dbo.tbClienteBanco.IDBanco LEFT OUTER JOIN
+                         dbo.tbMaestroBancoPropio ON dbo.tbFacturaVentaCabecera.IDBancoPropio = dbo.tbMaestroBancoPropio.IDBancoPropio LEFT OUTER JOIN
+                         dbo.tbMaestroFormaPago ON dbo.tbFacturaVentaCabecera.IDFormaPago = dbo.tbMaestroFormaPago.IDFormaPago LEFT OUTER JOIN
+                         dbo.tbMaestroMoneda ON dbo.tbFacturaVentaCabecera.IDMoneda = dbo.tbMaestroMoneda.IDMoneda LEFT OUTER JOIN
+                         dbo.tbMaestroContador ON dbo.tbFacturaVentaCabecera.IDContador = dbo.tbMaestroContador.IDContador LEFT OUTER JOIN
+                         dbo.tbUnidadTramitadora ON dbo.tbFacturaVentaCabecera.IDUnidadTramitadora = dbo.tbUnidadTramitadora.IDUnidadTramitadora LEFT OUTER JOIN
+                         dbo.tbOrganoGestor ON dbo.tbFacturaVentaCabecera.IDOrganoGestor = dbo.tbOrganoGestor.IDOrganoGestor LEFT OUTER JOIN
+                         dbo.tbOficinaContable ON dbo.tbFacturaVentaCabecera.IDOficinaContable = dbo.tbOficinaContable.IDOficinaContable LEFT OUTER JOIN
+                         dbo.tbFacturaCompraCabecera ON dbo.tbFacturaVentaCabecera.IDFacturaCompra = dbo.tbFacturaCompraCabecera.IDFactura LEFT OUTER JOIN
+                         dbo.tbMaestroProveedor ON dbo.tbFacturaCompraCabecera.IDProveedor = dbo.tbMaestroProveedor.IDProveedor LEFT OUTER JOIN
+                         dbo.tbMaestroPais AS PaisProveedor ON dbo.tbMaestroProveedor.IDPais = PaisProveedor.IDPais LEFT OUTER JOIN
+                         dbo.tbAlbaranVentaCabecera ON dbo.tbFacturaVentaLinea.IDAlbaran = dbo.tbAlbaranVentaCabecera.IDAlbaran LEFT OUTER JOIN
+                         dbo.tbPedidoVentaCabecera ON dbo.tbFacturaVentaLinea.IDPedido = dbo.tbPedidoVentaCabecera.IDPedido LEFT OUTER JOIN
+                             (SELECT        IDFactura, COUNT(IDTipoIVA) AS nIvas, COUNT(IDTipoIVARE) AS nIvasRE
+                               FROM            (SELECT DISTINCT 
+                                                                                   tbFacturaVentaLinea_1.IDFactura, tbFacturaVentaLinea_1.IDTipoIVA, CASE WHEN dbo.tbMaestroTipoIva.IvaRE <> 0 THEN tbFacturaVentaLinea_1.IDTipoIVA ELSE NULL END AS IDTipoIVARE
+                                                         FROM            dbo.tbFacturaVentaLinea AS tbFacturaVentaLinea_1 INNER JOIN
+                                                                                   dbo.tbMaestroTipoIva ON tbFacturaVentaLinea_1.IDTipoIVA = dbo.tbMaestroTipoIva.IDTipoIva) AS vAux_1
+                               GROUP BY IDFactura) AS vNIvasEnFactura ON dbo.tbFacturaVentaCabecera.IDFactura = vNIvasEnFactura.IDFactura CROSS JOIN
+                             (SELECT        CAST(COALESCE (Valor, 0) AS BIT) AS Serie
+                               FROM            dbo.tbParametro AS tbParametro_1
+                               WHERE        (IDParametro = N'SIISERIEFV')) AS vParamSIISerie CROSS JOIN
+                             (SELECT        CAST(COALESCE (Valor, 0) AS BIT) AS IvaCaja
+                               FROM            dbo.tbParametro AS tbParametro_1
+                               WHERE        (IDParametro = N'IVA_CAJA')) AS vParamIvaCaja CROSS JOIN
+                         dbo.tbDatosEmpresa
+
+-- vista modificada para mostrar las observaciones.
+SELECT        TOP (100) PERCENT dbo.xPrintingAuxiliarTable.IdProcess, dbo.xPrintingAuxiliarTable.NumberOfCopies AS Copia, dbo.tbFacturaVentaCabecera.IDFactura, 
+                         CASE WHEN vParamSIISerie.Serie = 1 THEN (COALESCE (dbo.tbFacturaVentaCabecera.IDContador, N'') + dbo.tbFacturaVentaCabecera.NFactura) ELSE dbo.tbFacturaVentaCabecera.NFactura END AS NFactura, 
+                         dbo.tbFacturaVentaCabecera.FechaFactura, dbo.tbFacturaVentaCabecera.RazonSocial, dbo.tbFacturaVentaCabecera.IDCliente, dbo.tbFacturaVentaCabecera.CifCliente, dbo.tbMaestroFormaPago.DescFormaPago, 
+                         dbo.tbFacturaVentaCabecera.BaseImponible, dbo.tbFacturaVentaCabecera.BaseImponibleA, dbo.tbFacturaVentaCabecera.ImpLineas, dbo.tbFacturaVentaCabecera.ImpLineasA, dbo.tbFacturaVentaCabecera.ImpIva, 
+                         dbo.tbFacturaVentaCabecera.ImpIvaA, dbo.tbFacturaVentaCabecera.ImpTotal, dbo.tbFacturaVentaCabecera.ImpTotalA, dbo.tbFacturaVentaCabecera.ImpRE, dbo.tbFacturaVentaCabecera.ImpREA, 
+                         dbo.tbFacturaVentaCabecera.RetencionIRPF, dbo.tbFacturaVentaCabecera.ImpRetencion, dbo.tbFacturaVentaCabecera.ImpRetencionA, dbo.tbFacturaVentaCabecera.FechaOperacion, 
+                         dbo.tbFacturaVentaCabecera.IDCondicionPago, dbo.tbFacturaVentaCabecera.Texto, dbo.tbMaestroMoneda.Abreviatura, dbo.tbMaestroMoneda.NDecimalesPrec, dbo.tbMaestroMoneda.NDecimalesImp, 
+                         dbo.tbFacturaVentaLinea.IDLineaFactura, COALESCE (dbo.tbFacturaVentaLinea.RefCliente, dbo.tbFacturaVentaLinea.IDArticulo) AS IDArticulo, CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL 
+                         THEN COALESCE (dbo.tbFacturaVentaLinea.DescRefCliente, dbo.tbFacturaVentaLinea.DescArticulo) ELSE dbo.tbMaestroImpuesto.DescImpuesto + N': ' + CONVERT(nvarchar, CONVERT(float, dbo.tbFacturaVentaLinea.KGPlastico))
+                          + N' - NR: ' + CONVERT(nvarchar, CONVERT(float, dbo.tbFacturaVentaLinea.KGPlasticoNR)) END AS DescArticulo, dbo.tbFacturaVentaLinea.IDAlbaran, CONVERT(numeric(23, 8), 
+                         CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL THEN dbo.tbFacturaVentaLinea.Cantidad ELSE dbo.tbFacturaVentaLinea.QInterna * dbo.tbFacturaVentaLinea.KGPlasticoNR END) AS Cantidad, 
+                         CONVERT(numeric(23, 8), CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL THEN dbo.tbFacturaVentaLinea.Dto1 ELSE 0 END) AS Dto1, CONVERT(numeric(23, 8), 
+                         CASE WHEN dbo.tbFacturaVentaCabecera.CambioA = 0 THEN 0 ELSE CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL 
+                         THEN dbo.tbFacturaVentaLinea.Precio ELSE dbo.tbFacturaVentaImpuesto.Valor / dbo.tbFacturaVentaCabecera.CambioA END END) AS Precio, CONVERT(numeric(23, 8), 
+                         CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL THEN dbo.tbFacturaVentaLinea.PrecioA ELSE dbo.tbFacturaVentaImpuesto.Valor END) AS PrecioA, CONVERT(numeric(23, 8), 
+                         CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL THEN dbo.tbFacturaVentaLinea.Importe ELSE dbo.tbFacturaVentaImpuesto.Importe END) AS Importe, CONVERT(numeric(23, 8), 
+                         CASE WHEN dbo.tbFacturaVentaImpuesto.IDImpuesto IS NULL THEN dbo.tbFacturaVentaLinea.ImporteA ELSE dbo.tbFacturaVentaImpuesto.ImporteA END) AS ImporteA, dbo.tbFacturaVentaLinea.IDConcepto, 
+                         dbo.tbFacturaVentaLinea.DescConcepto, CASE WHEN COALESCE (vNIvasEnFactura.nIvas, 0) = 1 THEN dbo.fFactorTipoIva(dbo.tbFacturaVentaLinea.IDTipoIVA, dbo.tbFacturaVentaCabecera.FechaFactura) ELSE 0 END AS Factor, 
+                         CASE WHEN COALESCE (vNIvasEnFactura.nIvasRE, 0) = 1 THEN dbo.fFactorTipoIvaRE(dbo.tbFacturaVentaLinea.IDTipoIVA, dbo.tbFacturaVentaCabecera.FechaFactura) ELSE 0 END AS IvaRE, 
+                         dbo.tbMaestroFormaPago.Trasferencia, dbo.tbMaestroBanco.DescBanco, dbo.tbClienteBanco.CodigoIBAN, dbo.tbClienteDireccion.RazonSocial AS RazonSocialFacturacion, dbo.tbClienteDireccion.Direccion, 
+                         dbo.tbClienteDireccion.CodPostal, dbo.tbClienteDireccion.Poblacion, dbo.tbClienteDireccion.Provincia, dbo.tbClienteDireccion.IDPais, PaisClienteDireccion.DescPais, COALESCE (dbo.tbAlbaranVentaCabecera.SuAlbaran, 
+                         dbo.tbAlbaranVentaCabecera.NAlbaran) AS NAlbaran, dbo.tbAlbaranVentaCabecera.FechaAlbaran, dbo.tbOficinaContable.DescOficinaContable, dbo.tbOrganoGestor.DescOrganoGestor, 
+                         dbo.tbUnidadTramitadora.DescUnidadTramitadora, dbo.tbDatosEmpresa.DatosRegistrales, dbo.vMonedaA.AbreviaturaA, dbo.vMonedaA.NDecimalesPrecA, dbo.vMonedaA.NDecimalesImpA, vParamIvaCaja.IvaCaja, 
+                         dbo.tbMaestroContador.IDTipoComprobante, dbo.tbMaestroProveedor.RazonSocial AS RazonSocialProveedor, dbo.tbMaestroProveedor.Direccion AS DireccionlProveedor, 
+                         dbo.tbMaestroProveedor.CodPostal AS CodPostalProveedor, dbo.tbMaestroProveedor.Poblacion AS PoblacionProveedor, dbo.tbMaestroProveedor.Provincia AS ProvinciaProveedor, 
+                         PaisProveedor.DescPais AS DescPaisProveedor, dbo.tbMaestroBancoPropio.CodigoIBAN AS CodigoIBANCliente, dbo.tbFacturaVentaLinea.Regalo, dbo.tbFacturaVentaLinea.RefCliente, dbo.tbFacturaVentaLinea.DescRefCliente, 
+                         dbo.tbMaestroMoneda.DescMoneda, dbo.tbFacturaVentaLinea.Texto AS TextoLinea, dbo.tbFacturaVentaLinea.IDUdMedida, dbo.tbPedidoVentaCabecera.NPedido AS PedidoCliente, 
+                         dbo.tbPedidoVentaCabecera.FechaPedido AS FechaPedidoCliente, dbo.tbFacturaVentaLinea.PedidoCliente AS PedidoClienteLinea, dbo.tbFacturaVentaLinea.IDOrdenLinea, dbo.tbFacturaVentaLinea.Importe AS ImporteL, 
+                         dbo.tbFacturaVentaLinea.Revision,
+                             (SELECT        TOP (1) DescObservacion
+                               FROM            dbo.GetObservacionesALE(dbo.tbFacturaVentaCabecera.IDCliente) AS GetObservacionesALE_1) AS Observacion1
+FROM            dbo.vMonedaA CROSS JOIN
+                         dbo.tbFacturaVentaCabecera LEFT OUTER JOIN
+                         dbo.vFacturaVentaLineaConImpuesto ON dbo.tbFacturaVentaCabecera.IDFactura = dbo.vFacturaVentaLineaConImpuesto.IDFactura LEFT OUTER JOIN
+                         dbo.tbFacturaVentaLinea ON dbo.vFacturaVentaLineaConImpuesto.IDLineaFactura = dbo.tbFacturaVentaLinea.IDLineaFactura LEFT OUTER JOIN
+                         dbo.tbFacturaVentaImpuesto ON dbo.vFacturaVentaLineaConImpuesto.IDLineaImpuesto = dbo.tbFacturaVentaImpuesto.IDLineaImpuesto LEFT OUTER JOIN
+                         dbo.tbMaestroImpuesto ON dbo.tbFacturaVentaImpuesto.IDImpuesto = dbo.tbMaestroImpuesto.IDImpuesto LEFT OUTER JOIN
+                         dbo.xPrintingAuxiliarTable ON dbo.tbFacturaVentaCabecera.IDFactura = dbo.xPrintingAuxiliarTable.NumericLink LEFT OUTER JOIN
+                         dbo.tbClienteDireccion ON dbo.tbFacturaVentaCabecera.IDDireccion = dbo.tbClienteDireccion.IDDireccion LEFT OUTER JOIN
+                         dbo.tbMaestroPais AS PaisClienteDireccion ON dbo.tbClienteDireccion.IDPais = PaisClienteDireccion.IDPais LEFT OUTER JOIN
+                         dbo.tbClienteBanco ON dbo.tbFacturaVentaCabecera.IDClienteBanco = dbo.tbClienteBanco.IDClienteBanco LEFT OUTER JOIN
+                         dbo.tbMaestroBanco ON dbo.tbMaestroBanco.IDBanco = dbo.tbClienteBanco.IDBanco LEFT OUTER JOIN
+                         dbo.tbMaestroBancoPropio ON dbo.tbFacturaVentaCabecera.IDBancoPropio = dbo.tbMaestroBancoPropio.IDBancoPropio LEFT OUTER JOIN
+                         dbo.tbMaestroFormaPago ON dbo.tbFacturaVentaCabecera.IDFormaPago = dbo.tbMaestroFormaPago.IDFormaPago LEFT OUTER JOIN
+                         dbo.tbMaestroMoneda ON dbo.tbFacturaVentaCabecera.IDMoneda = dbo.tbMaestroMoneda.IDMoneda LEFT OUTER JOIN
+                         dbo.tbMaestroContador ON dbo.tbFacturaVentaCabecera.IDContador = dbo.tbMaestroContador.IDContador LEFT OUTER JOIN
+                         dbo.tbUnidadTramitadora ON dbo.tbFacturaVentaCabecera.IDUnidadTramitadora = dbo.tbUnidadTramitadora.IDUnidadTramitadora LEFT OUTER JOIN
+                         dbo.tbOrganoGestor ON dbo.tbFacturaVentaCabecera.IDOrganoGestor = dbo.tbOrganoGestor.IDOrganoGestor LEFT OUTER JOIN
+                         dbo.tbOficinaContable ON dbo.tbFacturaVentaCabecera.IDOficinaContable = dbo.tbOficinaContable.IDOficinaContable LEFT OUTER JOIN
+                         dbo.tbFacturaCompraCabecera ON dbo.tbFacturaVentaCabecera.IDFacturaCompra = dbo.tbFacturaCompraCabecera.IDFactura LEFT OUTER JOIN
+                         dbo.tbMaestroProveedor ON dbo.tbFacturaCompraCabecera.IDProveedor = dbo.tbMaestroProveedor.IDProveedor LEFT OUTER JOIN
+                         dbo.tbMaestroPais AS PaisProveedor ON dbo.tbMaestroProveedor.IDPais = PaisProveedor.IDPais LEFT OUTER JOIN
+                         dbo.tbAlbaranVentaCabecera ON dbo.tbFacturaVentaLinea.IDAlbaran = dbo.tbAlbaranVentaCabecera.IDAlbaran LEFT OUTER JOIN
+                         dbo.tbPedidoVentaCabecera ON dbo.tbFacturaVentaLinea.IDPedido = dbo.tbPedidoVentaCabecera.IDPedido LEFT OUTER JOIN
+                             (SELECT        IDFactura, COUNT(IDTipoIVA) AS nIvas, COUNT(IDTipoIVARE) AS nIvasRE
+                               FROM            (SELECT DISTINCT 
+                                                                                   tbFacturaVentaLinea_1.IDFactura, tbFacturaVentaLinea_1.IDTipoIVA, CASE WHEN dbo.tbMaestroTipoIva.IvaRE <> 0 THEN tbFacturaVentaLinea_1.IDTipoIVA ELSE NULL END AS IDTipoIVARE
+                                                         FROM            dbo.tbFacturaVentaLinea AS tbFacturaVentaLinea_1 INNER JOIN
+                                                                                   dbo.tbMaestroTipoIva ON tbFacturaVentaLinea_1.IDTipoIVA = dbo.tbMaestroTipoIva.IDTipoIva) AS vAux_1
+                               GROUP BY IDFactura) AS vNIvasEnFactura ON dbo.tbFacturaVentaCabecera.IDFactura = vNIvasEnFactura.IDFactura CROSS JOIN
+                             (SELECT        CAST(COALESCE (Valor, 0) AS BIT) AS Serie
+                               FROM            dbo.tbParametro AS tbParametro_1
+                               WHERE        (IDParametro = N'SIISERIEFV')) AS vParamSIISerie CROSS JOIN
+                             (SELECT        CAST(COALESCE (Valor, 0) AS BIT) AS IvaCaja
+                               FROM            dbo.tbParametro AS tbParametro_1
+                               WHERE        (IDParametro = N'IVA_CAJA')) AS vParamIvaCaja CROSS JOIN
+                         dbo.tbDatosEmpresa
+
+-- funcion creada para obtener las observaciones de los clientes
+
+USE [SolmicroERP6_PruebasSub]
+GO
+/****** Object:  UserDefinedFunction [dbo].[GetObservacionesALE]    Script Date: 26/09/2023 13:19:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER FUNCTION [dbo].[GetObservacionesALE](@IDCliente nvarchar(25))
+RETURNS TABLE 
+AS
+RETURN 
+(
+SELECT tbMaestroObservacion.DescObservacion, tbClienteObservacion.IDClienteObservacion
+FROM tbClienteObservacion INNER JOIN 
+tbMaestroObservacion ON tbClienteObservacion.IDObservacion = tbMaestroObservacion.IDObservacion 
+WHERE (tbClienteObservacion.IDCliente = @IDCliente)
+)
+
