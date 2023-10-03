@@ -1,15 +1,7 @@
 -- funcion creada para la obtencion de los datos de la tabla INSERT INTO @Result(IDPadre ,Fase ,NPedido ,IDCliente ,Revision ,NOrden ,Pvp ) VALUES (@IDPadre,@Fase,@NPedido,@IDCliente,@Revision,@NOrden,@Pvp)
--- ================================================
--- Template generated from Template Explorer using:
--- Create Inline Function (New Menu).SQL
---
--- Use the Specify Values for Template Parameters 
--- command (Ctrl-Shift-M) to fill in the parameter 
--- values below.
---
--- This block of comments will not be included in
--- the definition of the function.
--- ================================================
+USE [SolmicroERP6_PruebasSub]
+GO
+/****** Object:  UserDefinedFunction [dbo].[al_datos_extras_pedido_compra]    Script Date: 03/10/2023 13:37:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -19,9 +11,9 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE FUNCTION al_datos_extras_pedido_compra(@IDComponente nvarchar(25))
+ALTER FUNCTION [dbo].[al_datos_extras_pedido_compra](@IDComponente nvarchar(25))
 RETURNS @Result TABLE(IDPadre nvarchar(25),Fase int,NPedido nvarchar(25),IDCliente nvarchar(25),
-Revision nvarchar(40),NOrden nvarchar(25),Pvp numeric(23, 8))
+Revision nvarchar(40),NOrden nvarchar(25),Pvp numeric(23, 8),FechaEntrega datetime)
 AS
 BEGIN 
 	DECLARE @IDPadre nvarchar(25)
@@ -33,6 +25,7 @@ BEGIN
 	DECLARE @Revision nvarchar(40)
 	DECLARE @NOrden nvarchar(25)
 	DECLARE @Pvp numeric(23, 8)
+	DECLARE @FechaEntrega datetime
 
 	--GET THE FATHER
 	SELECT TOP (1) @IDPadre= IDArticulo, @Fase= Secuencia FROM tbEstructura WHERE IDComponente = @IDComponente
@@ -45,7 +38,7 @@ BEGIN
 	WHERE (([IdArticulo] = @IDPadre and ([Estado] = 3 or [Estado] = 2 or [Estado] = 0 or [Estado] = 1) and (QFabricar - QFabricada) > 0))
 
 	--GET NPEDIDO AND IDCLIENTE
-	SELECT TOP (1) @NPedido=NPedido,@IDCliente=IDCliente, @IDPedido=IDPedido
+	SELECT TOP (1) @NPedido=NPedido,@IDCliente=IDCliente, @IDPedido=IDPedido,@FechaEntrega=FechaEntrega
 	FROM VFrmMntoConsultaPedidosVenta 
 	WHERE (([IDArticulo] = @IDPadre and [EstadoLinea] <> 2 and [EstadoLinea] <> 3 and [FechaEntrega] >= '20220101 00:00:00.000'))
 
@@ -61,7 +54,6 @@ BEGIN
 	SELECT TOP(1) @Pvp= Precio FROM tbPedidoVentaLinea WHERE (IDPedido = @IDPedido) AND (IDArticulo = @IDPadre)
 	END
 	END
-	INSERT INTO @Result(IDPadre ,Fase ,NPedido ,IDCliente ,Revision ,NOrden ,Pvp ) VALUES (@IDPadre,@Fase,@NPedido,@IDCliente,@Revision,@NOrden,@Pvp)
+	INSERT INTO @Result(IDPadre ,Fase ,NPedido ,IDCliente ,Revision ,NOrden ,Pvp,FechaEntrega ) VALUES (@IDPadre,@Fase,@NPedido,@IDCliente,@Revision,@NOrden,@Pvp,@FechaEntrega)
 RETURN 
 END
-GO
