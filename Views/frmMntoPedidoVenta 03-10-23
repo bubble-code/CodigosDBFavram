@@ -1,0 +1,27 @@
+-- vista original antes de adicionar el campo item pc para poder hacer las grabaciones en el formulario
+SELECT        dbo.tbPedidoVentaCabecera.IDPedido, dbo.tbPedidoVentaCabecera.NPedido, dbo.tbPedidoVentaCabecera.IDContador, dbo.tbPedidoVentaCabecera.IDCliente, dbo.tbPedidoVentaCabecera.PedidoCliente, 
+                         dbo.tbPedidoVentaCabecera.IDDireccionEnvio, dbo.tbPedidoVentaCabecera.IDCentroGestion, dbo.tbPedidoVentaCabecera.IDCondicionPago, dbo.tbPedidoVentaCabecera.IDFormaPago, dbo.tbPedidoVentaCabecera.IDMoneda, 
+                         dbo.tbPedidoVentaCabecera.IDAlmacen, dbo.tbPedidoVentaCabecera.IDCondicionEnvio, dbo.tbPedidoVentaCabecera.IDFormaEnvio, dbo.tbPedidoVentaCabecera.FechaPreparacion, dbo.tbPedidoVentaCabecera.CambioB, 
+                         dbo.tbPedidoVentaCabecera.CambioA, dbo.tbPedidoVentaCabecera.Texto, dbo.tbPedidoVentaCabecera.EDI, dbo.tbPedidoVentaCabecera.Prioridad, dbo.tbPedidoVentaCabecera.FechaEntrega, 
+                         dbo.tbPedidoVentaCabecera.FechaPedido, dbo.tbPedidoVentaCabecera.Estado, dbo.tbPedidoVentaCabecera.FechaAviso, dbo.tbPedidoVentaCabecera.IDEjercicio, dbo.frmMntoPedidoVentaTotalPeso.PNeto, 
+                         dbo.frmMntoPedidoVentaTotalPeso.PBruto, dbo.tbPedidoVentaCabecera.DtoPedido, dbo.tbPedidoVentaCabecera.DtoProntoPago, dbo.tbPedidoVentaCabecera.ImpIva, dbo.tbPedidoVentaCabecera.ImpIvaA, 
+                         dbo.tbPedidoVentaCabecera.ImpIvaB, dbo.tbPedidoVentaCabecera.ImpPedido, dbo.tbPedidoVentaCabecera.ImpPedidoA, dbo.tbPedidoVentaCabecera.ImpPedidoB, dbo.tbPedidoVentaCabecera.BaseImponible, 
+                         dbo.tbPedidoVentaCabecera.BaseImponibleA, dbo.tbPedidoVentaCabecera.BaseImponibleB, dbo.tbPedidoVentaCabecera.RecFinan, dbo.tbPedidoVentaCabecera.ImpRecFinan, dbo.tbPedidoVentaCabecera.ImpRecFinanA, 
+                         dbo.tbPedidoVentaCabecera.ImpRecFinanB, dbo.tbPedidoVentaCabecera.ImpDpp, dbo.tbPedidoVentaCabecera.ImpDppA, dbo.tbPedidoVentaCabecera.ImpDppB, dbo.tbPedidoVentaCabecera.ImpTotal, 
+                         dbo.tbPedidoVentaCabecera.ImpTotalA, dbo.tbPedidoVentaCabecera.ImpTotalB, dbo.tbPedidoVentaCabecera.ImpRE, dbo.tbPedidoVentaCabecera.ImpREA, dbo.tbPedidoVentaCabecera.ImpREB, 
+                         dbo.tbPedidoVentaCabecera.ImpDto, dbo.tbPedidoVentaCabecera.ImpDtoA, dbo.tbPedidoVentaCabecera.ImpDtoB, dbo.tbPedidoVentaCabecera.IDDireccionFra, ISNULL(dbo.tbClienteDireccion.RazonSocial, 
+                         dbo.frmMntoPedidoVentaDirFacturacion.RazonSocial) AS RazonSocial, ISNULL(dbo.tbClienteDireccion.CifCliente, dbo.frmMntoPedidoVentaDirFacturacion.CifCliente) AS CifCliente, ISNULL(dbo.tbClienteDireccion.Direccion, 
+                         dbo.frmMntoPedidoVentaDirFacturacion.direccion) AS Direccion, ISNULL(dbo.tbClienteDireccion.CodPostal, dbo.frmMntoPedidoVentaDirFacturacion.codPostal) AS CodPostal, ISNULL(dbo.tbClienteDireccion.Poblacion, 
+                         dbo.frmMntoPedidoVentaDirFacturacion.Poblacion) AS Poblacion, ISNULL(dbo.tbClienteDireccion.Provincia, dbo.frmMntoPedidoVentaDirFacturacion.Provincia) AS Provincia, dbo.tbPedidoVentaCabecera.TextoComercial, 
+                         dbo.tbPedidoVentaCabecera.IDCentroCoste, dbo.tbPedidoVentaCabecera.IDClienteBanco, dbo.tbPedidoVentaCabecera.EmpresaGrupo, dbo.tbPedidoVentaCabecera.EntregaProveedor, 
+                         dbo.tbPedidoVentaCabecera.IDModoTransporte, dbo.tbClienteDireccion.IDAlmacen AS IDAlmacenEnvio, dbo.tbPedidoVentaCabecera.Responsable, dbo.tbPedidoVentaCabecera.IDTPV, 
+                         dbo.tbPedidoVentaCabecera.IDVendedorTPV, dbo.tbPedidoVentaCabecera.IDTarifa, dbo.tbPedidoVentaCabecera.IDDAA, dbo.tbPedidoVentaCabecera.NDaa, dbo.tbPedidoVentaCabecera.AadReferenceCode, 
+                         dbo.tbPedidoVentaCabecera.IDClienteDistribuidor, dbo.tbPedidoVentaCabecera.IDDAABaseDatos, dbo.tbPedidoVentaCabecera.PedidoEDI, dbo.tbPedidoVentaCabecera.DepartamentoEDI, dbo.tbPedidoVentaCabecera.SeccionEDI, 
+                         dbo.tbPedidoVentaCabecera.EmisorEDI, dbo.tbPedidoVentaCabecera.CompradorEDI, dbo.tbPedidoVentaCabecera.ReceptorEDI, dbo.tbPedidoVentaCabecera.NumEnvioEDI, dbo.tbPedidoVentaCabecera.IDVersionEDI, 
+                         dbo.tbPedidoVentaCabecera.FormatoTipoLogisticaEDI, dbo.tbPedidoVentaCabecera.TipoIntegracionEDI, dbo.tbPedidoVentaCabecera.IDConsignatarioClienteEDI, dbo.tbPedidoVentaCabecera.IDConsignatarioFacturaEDI, 
+                         dbo.tbPedidoVentaCabecera.IDConsignatarioExpedidorEDI, dbo.tbPedidoVentaCabecera.IDProveedorClteEDI
+FROM            dbo.tbPedidoVentaCabecera INNER JOIN
+                         dbo.tbClienteDireccion ON dbo.tbPedidoVentaCabecera.IDDireccionEnvio = dbo.tbClienteDireccion.IDDireccion LEFT OUTER JOIN
+                         dbo.frmMntoPedidoVentaDirFacturacion ON dbo.tbPedidoVentaCabecera.IDDireccionFra = dbo.frmMntoPedidoVentaDirFacturacion.IDDireccion LEFT OUTER JOIN
+                         dbo.tbMaestroCliente ON dbo.tbPedidoVentaCabecera.IDCliente = dbo.tbMaestroCliente.IDCliente LEFT OUTER JOIN
+                         dbo.frmMntoPedidoVentaTotalPeso ON dbo.tbPedidoVentaCabecera.IDPedido = dbo.frmMntoPedidoVentaTotalPeso.IDPedido
