@@ -1,0 +1,43 @@
+-- vista despues de adicionar en campo ItemPC
+SELECT        dbo.tbPedidoVentaLinea.IDLineaPedido, dbo.tbPedidoVentaLinea.IDPedido, dbo.tbPedidoVentaLinea.PedidoCliente, dbo.tbPedidoVentaLinea.IDArticulo, dbo.tbPedidoVentaLinea.RefCliente, 
+                         dbo.tbPedidoVentaLinea.DescRefCliente, dbo.tbPedidoVentaLinea.DescArticulo, dbo.tbPedidoVentaLinea.QPedida, dbo.tbPedidoVentaLinea.QServida, dbo.tbPedidoVentaLinea.Precio, dbo.tbPedidoVentaLinea.PrecioA, 
+                         dbo.tbPedidoVentaLinea.PrecioB, dbo.tbPedidoVentaLinea.IDTipoIVA, dbo.tbPedidoVentaLinea.CContable, dbo.tbPedidoVentaLinea.UdValoracion, dbo.tbPedidoVentaLinea.IDUdMedida, dbo.tbPedidoVentaLinea.IDUdInterna, 
+                         dbo.tbPedidoVentaLinea.PreparadoExp, dbo.tbPedidoVentaLinea.Dto1, dbo.tbPedidoVentaLinea.Dto2, dbo.tbPedidoVentaLinea.Dto3, dbo.tbPedidoVentaLinea.Importe, dbo.tbPedidoVentaLinea.FechaEntrega, 
+                         dbo.tbPedidoVentaLinea.IDAlmacen, dbo.tbPedidoVentaLinea.Estado, dbo.tbPedidoVentaLinea.Regalo, dbo.tbPedidoVentaLinea.IDPromocionLinea, dbo.tbPedidoVentaLinea.Prioridad, 
+                         dbo.tbPedidoVentaLinea.IdOrdenLinea AS Linea, dbo.tbPedidoVentaLinea.QDisponible, dbo.tbPedidoVentaLinea.FechaPreparacion, dbo.tbMaestroArticuloAlmacen.StockFisico, dbo.tbPedidoVentaLinea.Factor, 
+                         dbo.tbPedidoVentaLinea.QInterna, dbo.tbPedidoVentaLinea.IdPrograma, dbo.tbPedidoVentaLinea.Texto, dbo.tbPedidoVentaLinea.Muelle, dbo.tbPedidoVentaLinea.PuntoDescarga, dbo.tbPedidoVentaLinea.Revision, 
+                         dbo.tbPedidoVentaLinea.IDLineaOfertaDetalle, dbo.tbOfertaComercialDetalle.NumOferta, dbo.tbPedidoVentaLinea.QFacturada, dbo.tbPedidoVentaLinea.Deposito, dbo.tbPedidoVentaLinea.SeguimientoTarifa, 
+                         dbo.tbPedidoVentaLinea.PedidoVentaOrigen, dbo.tbPedidoVentaLinea.IDTipoLinea, dbo.tbPedidoVentaLinea.IDCentroGestion, dbo.tbPedidoVentaLinea.QPedida - dbo.tbPedidoVentaLinea.QServida AS Pendiente, 
+                         dbo.tbPedidoVentaLinea.QPedida AS Cantidad, dbo.tbPedidoVentaLinea.PrecioCosteA, dbo.tbPedidoVentaLinea.PrecioCosteB, dbo.tbPedidoVentaLinea.ImporteA, dbo.tbPedidoVentaLinea.ImporteB, 
+                         dbo.tbPedidoVentaLinea.IDTarifa, dbo.tbPedidoVentaLinea.IDPromocion, dbo.tbMaestroTipoArticulo.Especial, dbo.tbPedidoVentaLinea.Dto, dbo.tbPedidoVentaLinea.DtoProntoPago, dbo.tbPedidoVentaLinea.IdLineaPrograma, 
+                         CASE WHEN PrecioCosteA = 0 THEN 100 ELSE (CASE WHEN qInterna = 0 THEN 0 ELSE (importeA / qInterna) 
+                         END / (PrecioCosteA / (CASE WHEN tbPedidoVentaLinea.UdValoracion = 0 THEN 1 ELSE tbPedidoVentaLinea.UdValoracion END)) - 1) * 100 END AS margen, dbo.tbMaestroArticulo.IDUdInterna2, 
+                         dbo.tbPedidoVentaLinea.QInterna2, dbo.tbPedidoVentaLinea.IDEvaluador, dbo.tbPedidoVentaLinea.PVP, dbo.tbPedidoVentaLinea.PVPA, dbo.tbPedidoVentaLinea.PVPB, dbo.tbPedidoVentaLinea.ImportePVP, 
+                         dbo.tbPedidoVentaLinea.ImportePVPA, dbo.tbPedidoVentaLinea.ImportePVPB, dbo.tbPedidoVentaLinea.QPendientePromocion, dbo.tbPedidoVentaLinea.QMaxPendientePromocion, dbo.tbPedidoVentaLinea.IDUDExpedicion, 
+                         dbo.tbMaestroUdMedida.DescUdMedida, dbo.tbOfertaComercialDetalle.IDOfertaComercial, dbo.tbPedidoVentaLinea.IDEmbalajePPal, tbArticuloEmbalaje_1.DescEmbalaje AS DescEmbalajePPal, 
+                         dbo.tbPedidoVentaLinea.IDEmbalajeAlt, dbo.tbArticuloEmbalaje.DescEmbalaje AS DescEmbalajeAlt, dbo.tbPedidoVentaLinea.Alternativo, dbo.tbBdgOperacionPlan.NOperacionPlan, dbo.tbPedidoVentaLinea.IDOrden, 
+                         dbo.tbOrdenFabricacion.NOrden, dbo.tbPedidoVentaLinea.IDLineaCampanaCupo, dbo.tbBdgCampanaCupoLinea.IDCampanaCupo, dbo.tbPedidoVentaLinea.RanEDI, dbo.tbPedidoVentaLinea.FechaExpedicionEDI, 
+                         dbo.tbPedidoVentaLinea.FirmeEDI, dbo.tbPedidoVentaLinea.IDFrecuenciaEDI, dbo.tbPedidoVentaLinea.FechaLimiteEntregaEDI, dbo.tbPedidoVentaLinea.HoraLimiteEntregaEDI, dbo.tbPedidoVentaLinea.KanbanEDI, 
+                         dbo.tbPedidoVentaLinea.RutaITTransporteEDI, dbo.tbPedidoVentaLinea.NumSufijoRutaEDI, dbo.tbPedidoVentaLinea.NumTransporteEDI, dbo.tbPedidoVentaLinea.TipoFechaProgramaEDI, 
+                         dbo.tbPedidoVentaLinea.HoraEntregaEDI, dbo.tbPedidoVentaLinea.PrecioPorHectogrado, dbo.tbPedidoVentaLinea.PrecioHectogrado, dbo.tbPedidoVentaLinea.Grado, dbo.tbPedidoVentaCabecera.NPedido, 
+                         dbo.tbPedidoVentaCabecera.FechaPedido, dbo.tbPedidoVentaCabecera.IDCliente, dbo.tbMaestroCliente.CifCliente, dbo.tbMaestroCliente.Telefono, dbo.tbMaestroCliente.DescCliente, dbo.tbMaestroCliente.Direccion, 
+                         dbo.tbMaestroCliente.CodPostal, dbo.tbMaestroCliente.Poblacion, dbo.tbMaestroCliente.Provincia, dbo.tbMaestroPais.DescPais, dbo.tbPedidoVentaCabecera.GastosEnvio, dbo.tbPedidoVentaCabecera.ImpIva, 
+                         dbo.tbPedidoVentaCabecera.ImpRE, dbo.tbPedidoVentaCabecera.ImpTotal, dbo.tbMaestroFormaPago.DescFormaPago, dbo.tbMaestroCondicionPago.DescCondicionPago, dbo.tbMaestroDiaPago.Dia1, 
+                         dbo.tbMaestroDiaPago.Dia2, dbo.tbMaestroDiaPago.Dia3, dbo.tbPedidoVentaLinea.ItemPC
+FROM            dbo.tbPedidoVentaLinea INNER JOIN
+                         dbo.tbPedidoVentaCabecera ON dbo.tbPedidoVentaLinea.IDPedido = dbo.tbPedidoVentaCabecera.IDPedido INNER JOIN
+                         dbo.tbMaestroCliente ON dbo.tbPedidoVentaCabecera.IDCliente = dbo.tbMaestroCliente.IDCliente INNER JOIN
+                         dbo.tbMaestroPais ON dbo.tbMaestroCliente.IDPais = dbo.tbMaestroPais.IDPais INNER JOIN
+                         dbo.tbMaestroFormaPago ON dbo.tbPedidoVentaCabecera.IDFormaPago = dbo.tbMaestroFormaPago.IDFormaPago INNER JOIN
+                         dbo.tbMaestroCondicionPago ON dbo.tbPedidoVentaCabecera.IDCondicionPago = dbo.tbMaestroCondicionPago.IDCondicionPago INNER JOIN
+                         dbo.tbMaestroDiaPago ON dbo.tbMaestroCliente.IDDiaPago = dbo.tbMaestroDiaPago.IDDiaPago LEFT OUTER JOIN
+                         dbo.tbMaestroUdMedida ON dbo.tbPedidoVentaLinea.IDUDExpedicion = dbo.tbMaestroUdMedida.IDUdMedida LEFT OUTER JOIN
+                         dbo.tbArticuloEmbalaje ON dbo.tbPedidoVentaLinea.IDEmbalajeAlt = dbo.tbArticuloEmbalaje.IDEmb LEFT OUTER JOIN
+                         dbo.tbArticuloEmbalaje AS tbArticuloEmbalaje_1 ON dbo.tbPedidoVentaLinea.IDEmbalajePPal = tbArticuloEmbalaje_1.IDEmb LEFT OUTER JOIN
+                         dbo.tbOfertaComercialDetalle ON dbo.tbPedidoVentaLinea.IDLineaOfertaDetalle = dbo.tbOfertaComercialDetalle.IDLineaOfertaDetalle LEFT OUTER JOIN
+                         dbo.tbMaestroArticulo ON dbo.tbPedidoVentaLinea.IDArticulo = dbo.tbMaestroArticulo.IDArticulo LEFT OUTER JOIN
+                         dbo.tbMaestroTipoArticulo ON dbo.tbMaestroArticulo.IDTipo = dbo.tbMaestroTipoArticulo.IDTipo LEFT OUTER JOIN
+                         dbo.tbMaestroArticuloAlmacen ON dbo.tbPedidoVentaLinea.IDArticulo = dbo.tbMaestroArticuloAlmacen.IDArticulo AND dbo.tbPedidoVentaLinea.IDAlmacen = dbo.tbMaestroArticuloAlmacen.IDAlmacen LEFT OUTER JOIN
+                         dbo.tbBdgOperacionPlan ON dbo.tbPedidoVentaLinea.IDLineaPedido = dbo.tbBdgOperacionPlan.IDLineaPedido LEFT OUTER JOIN
+                         dbo.tbOrdenFabricacion ON dbo.tbPedidoVentaLinea.IDOrden = dbo.tbOrdenFabricacion.IDOrden LEFT OUTER JOIN
+                         dbo.tbBdgCampanaCupoLinea ON dbo.tbPedidoVentaLinea.IDLineaCampanaCupo = dbo.tbBdgCampanaCupoLinea.IDLineaCampanaCupo
