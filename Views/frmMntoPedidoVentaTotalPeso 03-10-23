@@ -1,0 +1,12 @@
+-- vista original, se tiene que agregar el campo ItemPC, porque esta vista se usa en frmMntoPedidoVenta para poder habilitar la edicion de ese campo
+SELECT        dbo.tbPedidoVentaLinea.IDPedido, SUM(dbo.tbMaestroArticulo.PesoNeto * dbo.tbPedidoVentaLinea.QInterna) AS PNeto, SUM(dbo.tbMaestroArticulo.PesoBruto * dbo.tbPedidoVentaLinea.QInterna) AS PBruto
+FROM            dbo.tbMaestroArticulo INNER JOIN
+                         dbo.tbPedidoVentaLinea ON dbo.tbMaestroArticulo.IDArticulo = dbo.tbPedidoVentaLinea.IDArticulo
+GROUP BY dbo.tbPedidoVentaLinea.IDPedido
+
+-- vista despues de adicionar el campo ItemPc
+SELECT        dbo.tbPedidoVentaLinea.IDPedido, SUM(dbo.tbMaestroArticulo.PesoNeto * dbo.tbPedidoVentaLinea.QInterna) AS PNeto, SUM(dbo.tbMaestroArticulo.PesoBruto * dbo.tbPedidoVentaLinea.QInterna) AS PBruto, 
+                         dbo.tbPedidoVentaLinea.ItemPC
+FROM            dbo.tbMaestroArticulo INNER JOIN
+                         dbo.tbPedidoVentaLinea ON dbo.tbMaestroArticulo.IDArticulo = dbo.tbPedidoVentaLinea.IDArticulo
+GROUP BY dbo.tbPedidoVentaLinea.IDPedido, dbo.tbPedidoVentaLinea.ItemPC
