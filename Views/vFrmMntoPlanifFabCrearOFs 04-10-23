@@ -1,0 +1,41 @@
+--Modificacion de la vista vFrmMntoPlanifFabCrearOFs para que muestre en la pantalla de MRP de la produccion / Generacion Ordenes Fabricacion el dato "En Curso"
+-- Vista original
+SELECT        dbo.tbMRPAjustesValores.IDAjuste, dbo.tbMRPAjustesValores.IDUsuario, dbo.tbMRPAjustesValores.IDArticulo, dbo.tbMRPAjustesValores.QAFabricar, dbo.tbMRPAjustesValores.Plazo, dbo.tbMRPAjustesValores.FechaInicio, 
+                         dbo.tbMRPAjustesValores.FechaFin, dbo.tbMRPAjustesValores.Origen, dbo.tbMRPAjustesValores.IDNecesidad, dbo.tbMaestroArticulo.DescArticulo, dbo.tbPlanifAlmacenTrabajoFabricacion.IDAlmacen, 
+                         dbo.tbPlanifAlmacenTrabajoFabricacion.NivelMaximo, dbo.tbPlanifAlmacenTrabajoFabricacion.PorcentajeRechazo, dbo.tbMaestroArticulo.IDTipo, dbo.tbMRPAjustesValores.Agrupado, 
+                         dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo AS Expr1, dbo.tbMaestroArticuloAlmacen.LoteMinimo AS SMR, dbo.tbMaestroArticuloAlmacen.StockSeguridad AS BIN,
+                             (SELECT        SUM(QPedida - QServida) AS QPdte
+                               FROM            dbo.tbPedidoVentaLinea
+                               WHERE        (IDArticulo = dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo) AND (Estado = 0)
+                               GROUP BY IDArticulo) AS QPPdte,
+                             (SELECT        SUM(QFabricar - QFabricada) AS QFPendiente
+                               FROM            dbo.tbOrdenFabricacion
+                               WHERE        (IDArticulo = dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo) AND (Estado < 3)
+                               GROUP BY IDArticulo) AS QFPdte, dbo.tbMaestroArticulo.LoteMultiplo AS Lote_Entrega
+FROM            dbo.tbPlanifAlmacenTrabajoFabricacion INNER JOIN
+                         dbo.tbMRPAjustesValores ON dbo.tbPlanifAlmacenTrabajoFabricacion.IDUsuario = dbo.tbMRPAjustesValores.IDUsuario AND dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo = dbo.tbMRPAjustesValores.IDArticulo INNER JOIN
+                         dbo.tbMaestroArticulo ON dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo = dbo.tbMaestroArticulo.IDArticulo INNER JOIN
+                         dbo.tbMaestroArticuloAlmacen ON dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo = dbo.tbMaestroArticuloAlmacen.IDArticulo AND dbo.tbPlanifAlmacenTrabajoFabricacion.IDAlmacen = dbo.tbMaestroArticuloAlmacen.IDAlmacen
+
+--*****************************
+-- Vista modificada 04/10/2023
+--*****************************
+SELECT        dbo.tbMRPAjustesValores.IDAjuste, dbo.tbMRPAjustesValores.IDUsuario, dbo.tbMRPAjustesValores.IDArticulo, dbo.tbMRPAjustesValores.QAFabricar, dbo.tbMRPAjustesValores.Plazo, dbo.tbMRPAjustesValores.FechaInicio, 
+                         dbo.tbMRPAjustesValores.FechaFin, dbo.tbMRPAjustesValores.Origen, dbo.tbMRPAjustesValores.IDNecesidad, dbo.tbMaestroArticulo.DescArticulo, dbo.tbPlanifAlmacenTrabajoFabricacion.IDAlmacen, 
+                         dbo.tbPlanifAlmacenTrabajoFabricacion.NivelMaximo, dbo.tbPlanifAlmacenTrabajoFabricacion.PorcentajeRechazo, dbo.tbMaestroArticulo.IDTipo, dbo.tbMRPAjustesValores.Agrupado, 
+                         dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo AS Expr1, dbo.tbMaestroArticuloAlmacen.LoteMinimo AS SMR, dbo.tbMaestroArticuloAlmacen.StockSeguridad AS BIN,
+                             (SELECT        SUM(QPedida - QServida) AS QPdte
+                               FROM            dbo.tbPedidoVentaLinea
+                               WHERE        (IDArticulo = dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo) AND (Estado = 0)
+                               GROUP BY IDArticulo) AS QPPdte,
+                             (SELECT        SUM(QFabricar - QFabricada) AS QFPendiente
+                               FROM            dbo.tbOrdenFabricacion
+                               WHERE        (IDArticulo = dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo) AND (Estado < 3)
+                               GROUP BY IDArticulo) AS QFPdte, dbo.tbMaestroArticulo.LoteMultiplo AS Lote_Entrega, dbo.tbPlanifNecesidadesFabricacionAgrup.EnCurso
+FROM            dbo.tbPlanifAlmacenTrabajoFabricacion INNER JOIN
+                         dbo.tbMRPAjustesValores ON dbo.tbPlanifAlmacenTrabajoFabricacion.IDUsuario = dbo.tbMRPAjustesValores.IDUsuario AND dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo = dbo.tbMRPAjustesValores.IDArticulo INNER JOIN
+                         dbo.tbMaestroArticulo ON dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo = dbo.tbMaestroArticulo.IDArticulo INNER JOIN
+                         dbo.tbMaestroArticuloAlmacen ON dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo = dbo.tbMaestroArticuloAlmacen.IDArticulo AND 
+                         dbo.tbPlanifAlmacenTrabajoFabricacion.IDAlmacen = dbo.tbMaestroArticuloAlmacen.IDAlmacen INNER JOIN
+                         dbo.tbPlanifNecesidadesFabricacionAgrup ON dbo.tbPlanifAlmacenTrabajoFabricacion.IDUsuario = dbo.tbPlanifNecesidadesFabricacionAgrup.IDUsuario AND 
+                         dbo.tbPlanifAlmacenTrabajoFabricacion.IDArticulo = dbo.tbPlanifNecesidadesFabricacionAgrup.IDArticulo
