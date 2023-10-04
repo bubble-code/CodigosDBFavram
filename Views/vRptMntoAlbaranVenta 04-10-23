@@ -1,0 +1,88 @@
+-- Se modifica la vista para que salga en la impresion de los albaranes ItemPC, se le agraga la tabla tnPedidoVentaLinea [LEFT OUTER JOIN
+                         dbo.tbPedidoVentaLinea ON dbo.tbAlbaranVentaLinea.IDLineaPedido = dbo.tbPedidoVentaLinea.IDLineaPedido]
+-- vista original
+SELECT        dbo.tbAlbaranVentaLinea.IDPedido, dbo.tbAlbaranVentaCabecera.IDAlbaran, dbo.tbAlbaranVentaCabecera.FechaAlbaran, dbo.tbAlbaranVentaLinea.PedidoCliente, dbo.tbAlbaranVentaCabecera.IDFormaEnvio, 
+                         dbo.tbAlbaranVentaCabecera.IDFormaPago, dbo.tbAlbaranVentaCabecera.IDCondicionPago, dbo.tbAlbaranVentaCabecera.IDCondicionEnvio, dbo.tbAlbaranVentaCabecera.Estado, dbo.tbAlbaranVentaCabecera.GastosEnvio, 
+                         dbo.tbAlbaranVentaCabecera.GastosEmbalajes, dbo.tbAlbaranVentaCabecera.BaseImponible AS Importe, dbo.tbAlbaranVentaCabecera.DtoAlbaran, dbo.tbMaestroArticulo.PesoBruto, dbo.tbAlbaranVentaCabecera.PesoNeto, 
+                         dbo.tbAlbaranVentaLinea.IDLineaPedido, COALESCE (dbo.tbAlbaranVentaLinea.RefCliente, dbo.tbAlbaranVentaLinea.IDArticulo) AS IDArticulo, COALESCE (dbo.tbAlbaranVentaLinea.DescRefCliente, 
+                         dbo.tbAlbaranVentaLinea.DescArticulo) AS DescArticulo, dbo.tbAlbaranVentaLinea.RefCliente, dbo.tbAlbaranVentaLinea.IDUdMedida, dbo.tbAlbaranVentaLinea.Precio, dbo.tbAlbaranVentaLinea.Dto1, 
+                         dbo.tbAlbaranVentaLinea.Dto2, dbo.tbAlbaranVentaLinea.Dto3, dbo.tbAlbaranVentaLinea.Importe AS ImpLinea, dbo.tbAlbaranVentaLinea.UdValoracion, dbo.tbMaestroFormaEnvio.DescFormaEnvio, 
+                         dbo.tbMaestroAlmacen.DescAlmacen, dbo.tbMaestroMoneda.DescMoneda, dbo.tbMaestroCondicionEnvio.DescCondicionEnvio, COALESCE (dbo.tbClienteDireccion.CifCliente, dbo.tbMaestroCliente.CifCliente) AS CifCliente, 
+                         dbo.tbClienteDireccion.Direccion, dbo.tbClienteDireccion.CodPostal, dbo.tbClienteDireccion.Poblacion, dbo.tbClienteDireccion.Provincia, dbo.tbClienteDireccion.IDPais, dbo.tbMaestroPais.DescPais, dbo.tbMaestroTipoIva.Factor, 
+                         dbo.tbMaestroTipoIva.IvaRE, dbo.tbAlbaranVentaLinea.QServida, dbo.tbAlbaranVentaCabecera.IDCliente, dbo.tbMaestroFormaPago.DescFormaPago, dbo.tbMaestroCondicionPago.DescCondicionPago, 
+                         dbo.tbMaestroMoneda.Abreviatura, dbo.tbAlbaranVentaLinea.QServidaUd, dbo.tbMaestroMoneda.NDecimalesImp, dbo.tbMaestroCliente.RazonSocial, dbo.tbMaestroOperario.DescOperario AS DescVendedor, 
+                         dbo.tbMaestroCliente.TieneRE, dbo.tbAlbaranVentaLinea.QEtiEmbalaje, dbo.tbAlbaranVentaLinea.Lote, dbo.tbAlbaranVentaCabecera.Texto, dbo.tbMaestroCliente.ReferenciaProveedor, dbo.xPrintingAuxiliarTable.IdProcess, 
+                         dbo.xPrintingAuxiliarTable.NumberOfCopies, dbo.tbAlbaranVentaCabecera.DtoProntoPago, dbo.tbAlbaranVentaCabecera.ImpDto, dbo.tbMaestroPais.Extranjero, dbo.tbAlbaranVentaCabecera.NAlbaran, 
+                         dbo.tbClienteDireccion.RazonSocial AS DescCliente, dbo.tbAlbaranVentaCabecera.ImpIva, dbo.tbAlbaranVentaCabecera.ImpRE, dbo.tbAlbaranVentaLinea.DtoProntoPago AS DtoProntoPagoLinea, 
+                         dbo.tbAlbaranVentaLinea.DescRefCliente, dbo.tbAlbaranVentaLinea.Dto, dbo.tbAlbaranVentaCabecera.IDAlmacenDeposito, tbMaestroAlmacen_1.DescAlmacen AS DesAlmacenDeposito, 
+                         dbo.tbAlbaranVentaCabecera.ResponsableExpedicion, tbMaestroOperario_1.DescOperario, dbo.tbDatosEmpresa.DatosRegistrales, dbo.tbAlbaranVentaLinea.IDOrdenLinea, ISNULL(dbo.tbAlbaranVentaLinea.Revision, N'') 
+                         AS Revision, ISNULL(dbo.tbAlbaranVentaLinea.Texto, N'') AS NotaL, COALESCE (dbo.tbAlbaranVentaLinea.RefCliente, dbo.tbAlbaranVentaLinea.IDArticulo) + N' - ' + ISNULL(dbo.tbAlbaranVentaLinea.Revision, N'') AS ArticuloRev, 
+                         ISNULL(dbo.tbMaestroArticulo.Codigo3, N'') AS Codigo3, dbo.tbAlbaranVentaCabecera.PedidoCliente AS PedidoClientCabecera, COALESCE (dbo.tbAlbaranVentaLinea.RefCliente, dbo.tbAlbaranVentaLinea.IDArticulo) 
+                         + CASE WHEN dbo.tbAlbaranVentaLinea.Revision IS NOT NULL THEN N' -' + dbo.tbAlbaranVentaLinea.Revision WHEN dbo.tbArticuloCliente.Revision IS NOT NULL 
+                         THEN N' -' + dbo.tbArticuloCliente.Revision ELSE N'' END AS ArticuloRev2, dbo.tbArticuloCliente.Revision AS Revision2, dbo.tbAlbaranVentaLinea.IDLineaAlbaran
+FROM            dbo.tbMaestroCondicionEnvio RIGHT OUTER JOIN
+                         dbo.tbArticuloCliente INNER JOIN
+                         dbo.tbAlbaranVentaLinea INNER JOIN
+                         dbo.tbMaestroArticulo ON dbo.tbAlbaranVentaLinea.IDArticulo = dbo.tbMaestroArticulo.IDArticulo ON dbo.tbArticuloCliente.IDArticulo = dbo.tbAlbaranVentaLinea.IDArticulo LEFT OUTER JOIN
+                         dbo.tbMaestroTipoIva ON dbo.tbAlbaranVentaLinea.IDTipoIva = dbo.tbMaestroTipoIva.IDTipoIva RIGHT OUTER JOIN
+                         dbo.tbMaestroAlmacen AS tbMaestroAlmacen_1 RIGHT OUTER JOIN
+                         dbo.tbMaestroOperario AS tbMaestroOperario_1 RIGHT OUTER JOIN
+                         dbo.tbMaestroOperario RIGHT OUTER JOIN
+                         dbo.tbMaestroCliente INNER JOIN
+                         dbo.tbAlbaranVentaCabecera ON dbo.tbMaestroCliente.IDCliente = dbo.tbAlbaranVentaCabecera.IDCliente RIGHT OUTER JOIN
+                         dbo.xPrintingAuxiliarTable ON dbo.tbAlbaranVentaCabecera.IDAlbaran = dbo.xPrintingAuxiliarTable.NumericLink ON dbo.tbMaestroOperario.IDOperario = dbo.tbAlbaranVentaCabecera.IdVendedor LEFT OUTER JOIN
+                         dbo.tbMaestroFormaPago ON dbo.tbAlbaranVentaCabecera.IDFormaPago = dbo.tbMaestroFormaPago.IDFormaPago LEFT OUTER JOIN
+                         dbo.tbClienteDireccion INNER JOIN
+                         dbo.tbMaestroPais ON dbo.tbClienteDireccion.IDPais = dbo.tbMaestroPais.IDPais ON dbo.tbAlbaranVentaCabecera.IDDireccion = dbo.tbClienteDireccion.IDDireccion ON 
+                         tbMaestroOperario_1.IDOperario = dbo.tbAlbaranVentaCabecera.ResponsableExpedicion ON tbMaestroAlmacen_1.IDAlmacen = dbo.tbAlbaranVentaCabecera.IDAlmacenDeposito ON 
+                         dbo.tbArticuloCliente.IDCliente = dbo.tbAlbaranVentaCabecera.IDCliente AND dbo.tbAlbaranVentaLinea.IDAlbaran = dbo.tbAlbaranVentaCabecera.IDAlbaran LEFT OUTER JOIN
+                         dbo.tbMaestroAlmacen ON dbo.tbAlbaranVentaCabecera.IDAlmacen = dbo.tbMaestroAlmacen.IDAlmacen LEFT OUTER JOIN
+                         dbo.tbMaestroCondicionPago ON dbo.tbAlbaranVentaCabecera.IDCondicionPago = dbo.tbMaestroCondicionPago.IDCondicionPago LEFT OUTER JOIN
+                         dbo.tbMaestroMoneda ON dbo.tbAlbaranVentaCabecera.IDMoneda = dbo.tbMaestroMoneda.IDMoneda ON dbo.tbMaestroCondicionEnvio.IDCondicionEnvio = dbo.tbAlbaranVentaCabecera.IDCondicionEnvio LEFT OUTER JOIN
+                         dbo.tbMaestroFormaEnvio ON dbo.tbAlbaranVentaCabecera.IDFormaEnvio = dbo.tbMaestroFormaEnvio.IDFormaEnvio CROSS JOIN
+                         dbo.tbDatosEmpresa
+
+--***********************************
+-- vista modificada 04/10/2023
+--************************************
+SELECT        dbo.tbAlbaranVentaLinea.IDPedido, dbo.tbAlbaranVentaCabecera.IDAlbaran, dbo.tbAlbaranVentaCabecera.FechaAlbaran, dbo.tbAlbaranVentaLinea.PedidoCliente, dbo.tbAlbaranVentaCabecera.IDFormaEnvio, 
+                         dbo.tbAlbaranVentaCabecera.IDFormaPago, dbo.tbAlbaranVentaCabecera.IDCondicionPago, dbo.tbAlbaranVentaCabecera.IDCondicionEnvio, dbo.tbAlbaranVentaCabecera.Estado, dbo.tbAlbaranVentaCabecera.GastosEnvio, 
+                         dbo.tbAlbaranVentaCabecera.GastosEmbalajes, dbo.tbAlbaranVentaCabecera.BaseImponible AS Importe, dbo.tbAlbaranVentaCabecera.DtoAlbaran, dbo.tbMaestroArticulo.PesoBruto, dbo.tbAlbaranVentaCabecera.PesoNeto, 
+                         dbo.tbAlbaranVentaLinea.IDLineaPedido, COALESCE (dbo.tbAlbaranVentaLinea.RefCliente, dbo.tbAlbaranVentaLinea.IDArticulo) AS IDArticulo, COALESCE (dbo.tbAlbaranVentaLinea.DescRefCliente, 
+                         dbo.tbAlbaranVentaLinea.DescArticulo) AS DescArticulo, dbo.tbAlbaranVentaLinea.RefCliente, dbo.tbAlbaranVentaLinea.IDUdMedida, dbo.tbAlbaranVentaLinea.Precio, dbo.tbAlbaranVentaLinea.Dto1, 
+                         dbo.tbAlbaranVentaLinea.Dto2, dbo.tbAlbaranVentaLinea.Dto3, dbo.tbAlbaranVentaLinea.Importe AS ImpLinea, dbo.tbAlbaranVentaLinea.UdValoracion, dbo.tbMaestroFormaEnvio.DescFormaEnvio, 
+                         dbo.tbMaestroAlmacen.DescAlmacen, dbo.tbMaestroMoneda.DescMoneda, dbo.tbMaestroCondicionEnvio.DescCondicionEnvio, COALESCE (dbo.tbClienteDireccion.CifCliente, dbo.tbMaestroCliente.CifCliente) AS CifCliente, 
+                         dbo.tbClienteDireccion.Direccion, dbo.tbClienteDireccion.CodPostal, dbo.tbClienteDireccion.Poblacion, dbo.tbClienteDireccion.Provincia, dbo.tbClienteDireccion.IDPais, dbo.tbMaestroPais.DescPais, dbo.tbMaestroTipoIva.Factor, 
+                         dbo.tbMaestroTipoIva.IvaRE, dbo.tbAlbaranVentaLinea.QServida, dbo.tbAlbaranVentaCabecera.IDCliente, dbo.tbMaestroFormaPago.DescFormaPago, dbo.tbMaestroCondicionPago.DescCondicionPago, 
+                         dbo.tbMaestroMoneda.Abreviatura, dbo.tbAlbaranVentaLinea.QServidaUd, dbo.tbMaestroMoneda.NDecimalesImp, dbo.tbMaestroCliente.RazonSocial, dbo.tbMaestroOperario.DescOperario AS DescVendedor, 
+                         dbo.tbMaestroCliente.TieneRE, dbo.tbAlbaranVentaLinea.QEtiEmbalaje, dbo.tbAlbaranVentaLinea.Lote, dbo.tbAlbaranVentaCabecera.Texto, dbo.tbMaestroCliente.ReferenciaProveedor, dbo.xPrintingAuxiliarTable.IdProcess, 
+                         dbo.xPrintingAuxiliarTable.NumberOfCopies, dbo.tbAlbaranVentaCabecera.DtoProntoPago, dbo.tbAlbaranVentaCabecera.ImpDto, dbo.tbMaestroPais.Extranjero, dbo.tbAlbaranVentaCabecera.NAlbaran, 
+                         dbo.tbClienteDireccion.RazonSocial AS DescCliente, dbo.tbAlbaranVentaCabecera.ImpIva, dbo.tbAlbaranVentaCabecera.ImpRE, dbo.tbAlbaranVentaLinea.DtoProntoPago AS DtoProntoPagoLinea, 
+                         dbo.tbAlbaranVentaLinea.DescRefCliente, dbo.tbAlbaranVentaLinea.Dto, dbo.tbAlbaranVentaCabecera.IDAlmacenDeposito, tbMaestroAlmacen_1.DescAlmacen AS DesAlmacenDeposito, 
+                         dbo.tbAlbaranVentaCabecera.ResponsableExpedicion, tbMaestroOperario_1.DescOperario, dbo.tbDatosEmpresa.DatosRegistrales, dbo.tbAlbaranVentaLinea.IDOrdenLinea, ISNULL(dbo.tbAlbaranVentaLinea.Revision, N'') 
+                         AS Revision, ISNULL(dbo.tbAlbaranVentaLinea.Texto, N'') AS NotaL, COALESCE (dbo.tbAlbaranVentaLinea.RefCliente, dbo.tbAlbaranVentaLinea.IDArticulo) + N' - ' + ISNULL(dbo.tbAlbaranVentaLinea.Revision, N'') AS ArticuloRev, 
+                         ISNULL(dbo.tbMaestroArticulo.Codigo3, N'') AS Codigo3, dbo.tbAlbaranVentaCabecera.PedidoCliente AS PedidoClientCabecera, COALESCE (dbo.tbAlbaranVentaLinea.RefCliente, dbo.tbAlbaranVentaLinea.IDArticulo) 
+                         + CASE WHEN dbo.tbAlbaranVentaLinea.Revision IS NOT NULL THEN N' -' + dbo.tbAlbaranVentaLinea.Revision WHEN dbo.tbArticuloCliente.Revision IS NOT NULL 
+                         THEN N' -' + dbo.tbArticuloCliente.Revision ELSE N'' END AS ArticuloRev2, dbo.tbArticuloCliente.Revision AS Revision2, dbo.tbAlbaranVentaLinea.IDLineaAlbaran, dbo.tbPedidoVentaLinea.ItemPC
+FROM            dbo.tbMaestroCondicionEnvio RIGHT OUTER JOIN
+                         dbo.tbArticuloCliente INNER JOIN
+                         dbo.tbAlbaranVentaLinea INNER JOIN
+                         dbo.tbMaestroArticulo ON dbo.tbAlbaranVentaLinea.IDArticulo = dbo.tbMaestroArticulo.IDArticulo ON dbo.tbArticuloCliente.IDArticulo = dbo.tbAlbaranVentaLinea.IDArticulo LEFT OUTER JOIN
+                         dbo.tbPedidoVentaLinea ON dbo.tbAlbaranVentaLinea.IDLineaPedido = dbo.tbPedidoVentaLinea.IDLineaPedido LEFT OUTER JOIN
+                         dbo.tbMaestroTipoIva ON dbo.tbAlbaranVentaLinea.IDTipoIva = dbo.tbMaestroTipoIva.IDTipoIva RIGHT OUTER JOIN
+                         dbo.tbMaestroAlmacen AS tbMaestroAlmacen_1 RIGHT OUTER JOIN
+                         dbo.tbMaestroOperario AS tbMaestroOperario_1 RIGHT OUTER JOIN
+                         dbo.tbMaestroOperario RIGHT OUTER JOIN
+                         dbo.tbMaestroCliente INNER JOIN
+                         dbo.tbAlbaranVentaCabecera ON dbo.tbMaestroCliente.IDCliente = dbo.tbAlbaranVentaCabecera.IDCliente RIGHT OUTER JOIN
+                         dbo.xPrintingAuxiliarTable ON dbo.tbAlbaranVentaCabecera.IDAlbaran = dbo.xPrintingAuxiliarTable.NumericLink ON dbo.tbMaestroOperario.IDOperario = dbo.tbAlbaranVentaCabecera.IdVendedor LEFT OUTER JOIN
+                         dbo.tbMaestroFormaPago ON dbo.tbAlbaranVentaCabecera.IDFormaPago = dbo.tbMaestroFormaPago.IDFormaPago LEFT OUTER JOIN
+                         dbo.tbClienteDireccion INNER JOIN
+                         dbo.tbMaestroPais ON dbo.tbClienteDireccion.IDPais = dbo.tbMaestroPais.IDPais ON dbo.tbAlbaranVentaCabecera.IDDireccion = dbo.tbClienteDireccion.IDDireccion ON 
+                         tbMaestroOperario_1.IDOperario = dbo.tbAlbaranVentaCabecera.ResponsableExpedicion ON tbMaestroAlmacen_1.IDAlmacen = dbo.tbAlbaranVentaCabecera.IDAlmacenDeposito ON 
+                         dbo.tbArticuloCliente.IDCliente = dbo.tbAlbaranVentaCabecera.IDCliente AND dbo.tbAlbaranVentaLinea.IDAlbaran = dbo.tbAlbaranVentaCabecera.IDAlbaran LEFT OUTER JOIN
+                         dbo.tbMaestroAlmacen ON dbo.tbAlbaranVentaCabecera.IDAlmacen = dbo.tbMaestroAlmacen.IDAlmacen LEFT OUTER JOIN
+                         dbo.tbMaestroCondicionPago ON dbo.tbAlbaranVentaCabecera.IDCondicionPago = dbo.tbMaestroCondicionPago.IDCondicionPago LEFT OUTER JOIN
+                         dbo.tbMaestroMoneda ON dbo.tbAlbaranVentaCabecera.IDMoneda = dbo.tbMaestroMoneda.IDMoneda ON dbo.tbMaestroCondicionEnvio.IDCondicionEnvio = dbo.tbAlbaranVentaCabecera.IDCondicionEnvio LEFT OUTER JOIN
+                         dbo.tbMaestroFormaEnvio ON dbo.tbAlbaranVentaCabecera.IDFormaEnvio = dbo.tbMaestroFormaEnvio.IDFormaEnvio CROSS JOIN
+                         dbo.tbDatosEmpresa
