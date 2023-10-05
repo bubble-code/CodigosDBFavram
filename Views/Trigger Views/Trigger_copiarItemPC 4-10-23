@@ -1,23 +1,22 @@
 -- Nuevo Trigger para copiar el ItemPC desde el pedido de venta al albaran de venta
 
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
 -- Author:		Alejandro,Obregon
 -- Create date: 04-10-2023
 -- Description:	Trigger para copiar el ItemPC cuando se crea un nuevo albaran
 -- =============================================
-CREATE TRIGGER copiarItemPC
-   ON  tbAlbaranVentaLinea
+ALTER TRIGGER [dbo].[copiarItemPC]
+   ON  [dbo].[tbAlbaranVentaLinea]
    AFTER INSERT
 AS 
 BEGIN
 DECLARE @IDLineaPedido INT
+DECLARE @ItemPC NVARCHAR(5)
+
 SELECT @IDLineaPedido=IDLineaPedido FROM inserted
-	
-	UPDATE tbAlbaranVentaLinea SET ItemPC= (SELECT ItemPC FROM tbAlbaranVentaLinea WHERE (IDLineaPedido = @IDLineaPedido))
+SELECT @ItemPC=ItemPC FROM tbPedidoVentaLinea WHERE (IDLineaPedido = @IDLineaPedido)
+UPDATE tbAlbaranVentaLinea set ItemPC = CONVERT(nvarchar(255), @ItemPC) where (IDLineaPedido = @IDLineaPedido)
 
 END
-GO
+
