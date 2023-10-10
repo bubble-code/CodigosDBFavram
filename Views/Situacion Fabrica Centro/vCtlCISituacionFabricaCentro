@@ -21,6 +21,8 @@ SELECT DISTINCT
                                                                WHERE        (IDOrden = dbo.tbOrdenRuta.IDOrden) AND (Secuencia < dbo.tbOrdenRuta.Secuencia)
                                                                ORDER BY Secuencia DESC))) AS QSecAnterior,
                              (SELECT        CASE WHEN
+                                                             (SELECT        TOP (1) DescCliente AS Expr1
+                                                               FROM            dbo.GetNOrigenFechaDeOFabri(dbo.tbOrdenFabricacion.IDOrden) AS GetNOrigenFechaDeOFabri_1) IS NULL THEN 'No Cliente' WHEN
                                                              (SELECT        COUNT(DescCliente) AS Expr1
                                                                FROM            dbo.GetNOrigenFechaDeOFabri(dbo.tbOrdenFabricacion.IDOrden) AS GetNOrigenFechaDeOFabri_1) > 1 THEN 'Varios' ELSE
                                                              (SELECT        TOP (1) DescCliente AS Expr1
