@@ -1,6 +1,28 @@
 --Vista Creada para la nueva pantalla de Situacion Fabrica Centro
 -- Original
-  SELECT DISTINCT 
+SELECT DISTINCT 
+                         0 AS Estado, 1 AS QPendiente, tbOrdenRuta_1.IDCentro, dbo.tbMaestroCentro.DescCentro, dbo.CapTeoricaDiariaPorCentro(tbOrdenRuta_1.IDCentro) AS CapacidadTeoricaDiaria, SUM(tbOrdenRuta_1.TiempoEjecUnit) 
+                         AS [Carga de Trabajo], SUM(tbOrdenRuta_1.TiempoEjecUnit) * 100.0 / NULLIF
+                             ((SELECT        SUM(TiempoEjecUnit) AS Expr1
+                                 FROM            dbo.tbOrdenRuta AS tbOrdenRuta_2
+                                 WHERE        (Desglosado = 0)), 0) AS [%]
+FROM            dbo.tbOrdenFabricacion AS tbOrdenFabricacion_2 RIGHT OUTER JOIN
+                             (SELECT        IDOrden, CAST(COALESCE (OFOrigen, IDOrden) AS INT) AS OFOrigen
+                               FROM            dbo.tbOrdenFabricacion AS tbOrdenFabricacion_1) AS Origen ON tbOrdenFabricacion_2.IDOrden = Origen.OFOrigen RIGHT OUTER JOIN
+                         dbo.tbOrdenRuta AS tbOrdenRuta_1 INNER JOIN
+                         dbo.tbOrdenFabricacion ON tbOrdenRuta_1.IDOrden = dbo.tbOrdenFabricacion.IDOrden INNER JOIN
+                         dbo.tbMaestroCentro ON tbOrdenRuta_1.IDCentro = dbo.tbMaestroCentro.IDCentro INNER JOIN
+                         dbo.tbMaestroArticulo ON dbo.tbOrdenFabricacion.IDArticulo = dbo.tbMaestroArticulo.IDArticulo ON Origen.IDOrden = dbo.tbOrdenFabricacion.IDOrden LEFT OUTER JOIN
+                         dbo.tbMaestroArticuloAlmacen ON dbo.tbOrdenFabricacion.IDArticulo = dbo.tbMaestroArticuloAlmacen.IDArticulo AND dbo.tbOrdenFabricacion.IDAlmacen = dbo.tbMaestroArticuloAlmacen.IDAlmacen
+WHERE        (tbOrdenRuta_1.Desglosado = 0)
+GROUP BY tbOrdenRuta_1.IDCentro, dbo.tbMaestroCentro.DescCentro
+
+
+
+
+
+
+SELECT DISTINCT 
                          dbo.tbOrdenFabricacion.IDOrden, dbo.tbOrdenFabricacion.IDArticulo, dbo.tbOrdenFabricacion.NOrden, CASE WHEN (dbo.tbOrdenRuta.QFabricar - dbo.tbOrdenRuta.QBuena) 
                          < 0 THEN 0 ELSE (dbo.tbOrdenRuta.QFabricar - dbo.tbOrdenRuta.QBuena) END AS QPendiente, dbo.tbOrdenFabricacion.Estado, CONVERT(varchar, dbo.tbOrdenRuta.FechaInicio, 103) AS FechaInicio, CONVERT(varchar, 
                          dbo.tbOrdenRuta.FechaFin, 103) AS FechaFin, dbo.tbOrdenFabricacion.FechaCreacion, dbo.tbOrdenFabricacion.IDAlmacen, dbo.tbOrdenRuta.DescOperacion, dbo.tbOrdenRuta.IDCentro, dbo.tbMaestroCentro.DescCentro, 
